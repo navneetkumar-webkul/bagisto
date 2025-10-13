@@ -17,6 +17,8 @@
         "ext-pdo": "*",
         "ext-pdo_mysql": "*",
         "ext-tokenizer": "*",
+        "api-platform/graphql": "^4",
+        "api-platform/laravel": "^4.1",
         "astrotomic/laravel-translatable": "^11.0.0",
         "bagisto/image-cache": "dev-master",
         "barryvdh/laravel-dompdf": "^2.0.0",
@@ -94,7 +96,8 @@
             "Webkul\\SocialShare\\": "packages/Webkul/SocialShare/src",
             "Webkul\\Tax\\": "packages/Webkul/Tax/src",
             "Webkul\\Theme\\": "packages/Webkul/Theme/src",
-            "Webkul\\User\\": "packages/Webkul/User/src"
+            "Webkul\\User\\": "packages/Webkul/User/src",
+            "Webkul\\ApiResources\\": "packages/Webkul/ApiResources"
         }
     },
     "autoload-dev": {

@@ -35,11 +35,16 @@ class Handler extends BaseHandler
     protected function handleAuthenticationException(): void
     {
         $this->renderable(function (AuthenticationException $exception, Request $request) {
-            $namespace = $request->is(config('app.admin_url').'/*') ? 'admin' : 'shop';
-
-            if ($request->wantsJson()) {
-                return response()->json(['error' => trans("{$namespace}::app.errors.401.description")], 401);
+            // Check if it's an API request
+            if ($request->is('api/*') || $request->wantsJson()) {
+                return response()->json([
+                    'error' => 'Unauthenticated',
+                    'message' => $exception->getMessage()
+                ], 401);
             }
+
+            // Handle web routes
+            $namespace = $request->is(config('app.admin_url').'/*') ? 'admin' : 'shop';
 
             if ($namespace !== 'admin') {
                 return redirect()->guest(route('shop.customer.session.index'));
