@@ -64,7 +64,6 @@ class SystemConfig
     public function prepareConfigurationItems()
     {
         $configWithDotNotation = [];
-
         foreach ($this->retrieveCoreConfig() as $item) {
             $configWithDotNotation[$item['key']] = $item;
         }

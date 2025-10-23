@@ -4,9 +4,18 @@ namespace Webkul\Customer\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Webkul\Customer\Facades\Captcha;
+use Webkul\Customer\Models\CustomerGroup;
 
 class CustomerServiceProvider extends ServiceProvider
 {
+    /**
+     * Register services.
+     */
+    public function register(): void
+    {
+        $this->app->bind(\Webkul\Customer\Contracts\CustomerGroup::class, CustomerGroup::class);
+    }
+
     /**
      * Bootstrap application services.
      *

@@ -1,6 +1,8 @@
 <?php
 
-use App\Http\Middleware\EncryptCookies;
+use Webkul\ApiResources\Http\Middleware\EncryptCookies;
+use Webkul\ApiResources\Http\Middleware\VerifyCsrfToken;
+use Webkul\ApiResources\Http\Middleware\CustomEnsureFrontendRequestsAreStateful;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Cookie\Middleware\EncryptCookies as BaseEncryptCookies;
 use Illuminate\Foundation\Application;
@@ -40,9 +42,21 @@ return Application::configure(basePath: dirname(__DIR__))
          * Add the overridden middleware at the end of the list.
          */
         $middleware->replaceInGroup('web', BaseEncryptCookies::class, EncryptCookies::class);
+
+        // Register our custom CSRF middleware with API exceptions
+        $middleware->replaceInGroup('web', \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class, VerifyCsrfToken::class);
+
+        $middleware->api(prepend: [
+            CustomEnsureFrontendRequestsAreStateful::class,
+        ]);
+
+        // Add rate limiting
+        $middleware->throttleApi();
     })
     ->withSchedule(function (Schedule $schedule) {
-        //
+    //   'ApiPlatform\\Laravel\\ApiPlatformProvider',
+    //   'ApiPlatform\\Laravel\\ApiPlatformDeferredProvider',
+    //   'ApiPlatform\\Laravel\\Eloquent\\ApiPlatformEventProvider',
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

@@ -202,7 +202,18 @@ class Core
      */
     public function getDefaultChannelCode(): string
     {
-        return $this->getDefaultChannel()?->code;
+        $channel = $this->getDefaultChannel();
+
+        if (! $channel) {
+            // Try to find the first channel
+            $channel = app(ChannelRepository::class)->first();
+
+            if (! $channel) {
+                throw new \Exception('No channel exists in the system. Please run php artisan db:seed to create default data.');
+            }
+        }
+
+        return $channel->code;
     }
 
     /**
@@ -210,7 +221,17 @@ class Core
      */
     public function getDefaultLocaleCodeFromDefaultChannel(): string
     {
-        return $this->getDefaultChannel()->default_locale->code;
+        $channel = $this->getDefaultChannel();
+
+        if (! $channel) {
+            return 'en';
+        }
+
+        if (! $channel->default_locale) {
+            return 'en';
+        }
+
+        return $channel->default_locale->code ?? 'en';
     }
 
     /**

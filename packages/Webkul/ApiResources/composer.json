@@ -1,0 +1,26 @@
+{
+    "name": "bagisto/api-resources",
+    "license": "MIT",
+    "description" : "API Resources package",
+    "authors": [
+        {
+            "name": "Bagisto",
+            "email": "support@bagisto.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Webkul\\ApiResources\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Webkul\\ApiResources\\Providers\\ApiResourcesServiceProvider"
+            ],
+            "aliases": {}
+        }
+    },
+    "minimum-stability": "dev"
+}

@@ -44,4 +44,7 @@ return [
     Webkul\Theme\Providers\ThemeServiceProvider::class,
     Webkul\User\Providers\UserServiceProvider::class,
     Webkul\ApiResources\Providers\ApiResourcesServiceProvider::class,
+    ApiPlatform\Laravel\ApiPlatformProvider::class,
+    ApiPlatform\Laravel\ApiPlatformDeferredProvider::class,
+    ApiPlatform\Laravel\Eloquent\ApiPlatformEventProvider::class,
 ];

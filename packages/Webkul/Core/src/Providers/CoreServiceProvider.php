@@ -19,6 +19,20 @@ class CoreServiceProvider extends ServiceProvider
         $this->registerCommands();
 
         $this->registerOverrides();
+
+        $this->commands([
+            \Webkul\Core\Console\Commands\BagistoInstall::class
+        ]);
+
+        // Bind Core Contracts
+        $this->app->bind(\Webkul\Core\Contracts\Channel::class, \Webkul\Core\Models\Channel::class);
+        $this->app->bind(\Webkul\Core\Contracts\Currency::class, \Webkul\Core\Models\Currency::class);
+        $this->app->bind(\Webkul\Core\Contracts\CurrencyExchangeRate::class, \Webkul\Core\Models\CurrencyExchangeRate::class);
+        $this->app->bind(\Webkul\Core\Contracts\Locale::class, \Webkul\Core\Models\Locale::class);
+        $this->app->bind(\Webkul\Core\Contracts\Country::class, \Webkul\Core\Models\Country::class);
+        $this->app->bind(\Webkul\Core\Contracts\CountryState::class, \Webkul\Core\Models\CountryState::class);
+
+
     }
 
     /**

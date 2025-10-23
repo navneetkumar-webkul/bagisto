@@ -170,21 +170,20 @@ return [
     // we recommend using "file" or "acpu"
     'cache' => 'file',
 
-    // install `api-platform/http-cache`
-    // 'http_cache' => [
-    //     'etag' => true,
-    //     'max_age' => null,
-    //     'shared_max_age' => null,
-    //     'vary' => null,
-    //     'public' => null,
-    //     'stale_while_revalidate' => null,
-    //     'stale_if_error' => null,
-    //     'invalidation' => [
-    //         'urls' => [],
-    //         'scoped_clients' => [],
-    //         'max_header_length' => 7500,
-    //         'request_options' => [],
-    //         'purger' => ApiPlatform\HttpCache\SouinPurger::class,
-    //     ],
-    // ],
+    'http_cache' => [
+        'etag' => true,
+        'max_age' => 3600,
+        'shared_max_age' => 3600,
+        'vary' => ['Accept', 'Authorization'],
+        'public' => true,
+        'stale_while_revalidate' => 60,
+        'stale_if_error' => 3600,
+        'invalidation' => [
+            'urls' => [],
+            'scoped_clients' => [],
+            'max_header_length' => 7500,
+            'request_options' => [],
+            'purger' => ApiPlatform\HttpCache\SouinPurger::class,
+        ],
+    ],
 ];
