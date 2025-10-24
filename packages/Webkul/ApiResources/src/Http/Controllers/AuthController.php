@@ -3,12 +3,10 @@
 namespace Webkul\ApiResources\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
-use Webkul\User\Models\Admin;
-use Webkul\ApiResources\Auth\{LoginResource, TokenResource, TokenData};
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 
 class AuthController extends BaseController
 {
@@ -17,57 +15,144 @@ class AuthController extends BaseController
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-            'device_name' => 'required'
+            'device_name' => 'required',
         ]);
 
-        if (Auth::guard('admin')->attempt([
+        if (!Auth::guard('admin')->attempt([
             'email' => $credentials['email'],
             'password' => $credentials['password'],
         ])) {
-            $user = Auth::guard('admin')->user();
-            $token = $user->createToken($credentials['device_name'])->plainTextToken;
-
-            $role = $user->role;
-            return response()->json([
-                'message' => 'Logged in successfully.',
-                'data' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'status' => $user->status,
-                    'role' => [
-                        'id' => $role->id,
-                        'name' => $role->name,
-                        'description' => $role->description,
-                        'permission_type' => $role->permission_type,
-                        'permission' => $role->permission,
-                        'created_at' => $role->created_at->format('Y-m-d H:i:s'),
-                        'updated_at' => $role->updated_at->format('Y-m-d H:i:s')
-                    ],
-                    'token' => $token,
-                    'created_at' => $user->created_at->format('Y-m-d H:i:s'),
-                    'updated_at' => $user->updated_at->format('Y-m-d H:i:s')
-                ]
-            ], 200);
+            return response()->json(['error' => 'Invalid credentials'], 401);
         }
 
-        throw new \Symfony\Component\HttpKernel\Exception\BadRequestHttpException('Invalid Email or Password');
+        $user = Auth::guard('admin')->user();
+        $token = $user->createToken($credentials['device_name'])->plainTextToken;
+
+        return response()->json([
+            'message' => 'Logged in successfully',
+            'token' => $token,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ],
+        ]);
     }
 
     public function logout(Request $request)
     {
-        if ($request->user()) {
-            $request->user()->tokens()->delete();
-        }
+        $request->user('sanctum')->currentAccessToken()->delete();
+
+        return response()->json(['message' => 'Logged out successfully']);
+    }
+
+    /**
+     * Get logged in admin user's details
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get(Request $request)
+    {
+        $admin = $request->user('sanctum');
 
         return response()->json([
-            'message' => 'Successfully logged out'
+            'message' => 'Admin details retrieved successfully',
+            'data' => [
+                'id' => $admin->id,
+                'name' => $admin->name,
+                'email' => $admin->email,
+                'status' => $admin->status,
+                'image' => $admin->image,
+                'image_url' => $admin->image_url,
+            ],
         ]);
     }
 
-    public function user(Request $request)
+    /**
+     * Update admin user's profile
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request)
     {
-        dd(__LINE__);
-        return response()->json($request->user());
+        $admin = $request->user('sanctum');
+
+        $validated = $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'email' => 'sometimes|required|email|unique:admins,email,' . $admin->id,
+            'password' => 'sometimes|required|string|min:8|confirmed',
+        ]);
+
+        // Update only the fields that were provided
+        if (isset($validated['name'])) {
+            $admin->name = $validated['name'];
+        }
+
+        if (isset($validated['email'])) {
+            $admin->email = $validated['email'];
+        }
+
+        if (isset($validated['password'])) {
+            $admin->password = Hash::make($validated['password']);
+        }
+
+        $admin->save();
+
+        return response()->json([
+            'message' => 'Admin profile updated successfully',
+            'data' => [
+                'id' => $admin->id,
+                'name' => $admin->name,
+                'email' => $admin->email,
+                'status' => $admin->status,
+                'image' => $admin->image,
+                'image_url' => $admin->image_url,
+            ],
+        ]);
+    }
+
+    /**
+     * Send password reset link
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function forgotPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:admins,email',
+        ]);
+
+        try {
+            // Send password reset link
+            $status = Password::broker('admins')->sendResetLink(
+                $request->only('email')
+            );
+
+            // Check if password reset was sent successfully
+            if ($status == Password::RESET_LINK_SENT) {
+                return response()->json([
+                    'message' => 'Password reset link has been sent to your email',
+                    'status' => 'success',
+                ], 200);
+            } elseif ($status == Password::INVALID_USER) {
+                return response()->json([
+                    'error' => 'User not found',
+                ], 404);
+            } else {
+                return response()->json([
+                    'error' => 'Unable to send password reset link',
+                    'status_code' => $status,
+                ], 400);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Password reset error: ' . $e->getMessage());
+            return response()->json([
+                'error' => 'Unable to send password reset link. Please try again later.',
+                'details' => env('APP_DEBUG') ? $e->getMessage() : null,
+            ], 500);
+        }
     }
 }

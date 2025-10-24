@@ -2,13 +2,7 @@
 
 /*
  * This file is part of the API Platform project.
- *
- * (c) Kévin Dunglas <dunglas@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 
 use ApiPlatform\Metadata\UrlGeneratorInterface;
@@ -17,7 +11,7 @@ use Illuminate\Auth\AuthenticationException;
 use Symfony\Component\Serializer\NameConverter\SnakeCaseToCamelCaseNameConverter;
 
 return [
-    'title' => 'Bagisto API',
+    'title' => 'Bagisto API Resources',
     'description' => 'Bagisto provides comprehensive API solutions to enable integration and extension of its e-commerce platform. These APIs facilitate the development of various applications, including mobile apps, third-party integrations, and headless commerce solutions.',
     'version' => '1.0.0',
     'show_webby' => true,
@@ -28,42 +22,20 @@ return [
 
     'swagger_ui' => [
         'enabled' => true,
-        'middleware' => ['web'],
-    ],
-
-    'defaults' => [
-        'pagination_enabled' => true,
-        'pagination_partial' => false,
-        'pagination_client_enabled' => false,
-        'pagination_client_items_per_page' => false,
-        'pagination_client_partial' => false,
-        'pagination_items_per_page' => 30,
-        'pagination_maximum_items_per_page' => 30,
-        'route_prefix' => '/api',
         'middleware' => ['api'],
     ],
 
     'resources' => [
-        // app_path('Models'),
         base_path('packages/Webkul/ApiResources/'),
     ],
 
     'formats' => [
         'jsonld' => ['application/ld+json'],
         'json' => ['application/json'],
-        // 'jsonapi' => ['application/vnd.api+json'],
-        // 'csv' => ['text/csv'],
     ],
 
     'patch_formats' => [
         'json' => ['application/merge-patch+json'],
-    ],
-
-    'graphql' => [
-        'enabled' => false,
-        'graphiql' => [
-            'enabled' => false,
-        ],
     ],
 
     'docs_formats' => [
@@ -85,8 +57,8 @@ return [
         'pagination_client_partial' => false,
         'pagination_items_per_page' => 30,
         'pagination_maximum_items_per_page' => 30,
-        'route_prefix' => '/api',
-        'middleware' => [],
+        'route_prefix' => '/api/v1',
+        'middleware' => ['auth:sanctum'],
     ],
 
     'pagination' => [
@@ -97,20 +69,26 @@ return [
     ],
 
     'graphql' => [
-        // Disable GraphQL by default in this environment to avoid container bindings
-        // referencing optional GraphQL interfaces when the GraphQL component isn't installed.
         'enabled' => true,
+        'graphiql' => [
+            'enabled' => env('API_PLATFORM_GRAPHIQL_ENABLED', true),
+        ],
+        'graphql_playground' => [
+            'enabled' => env('API_PLATFORM_GRAPHQL_PLAYGROUND_ENABLED', true),
+        ],
         'nesting_separator' => '__',
         'introspection' => ['enabled' => true],
         'max_query_complexity' => 500,
         'max_query_depth' => 200,
-        // 'middleware' => null,
+        'route_prefix' => '/api/v1/graphql',
+        'middleware' => [
+
+
+        ],
     ],
 
     'graphiql' => [
         'enabled' => true,
-        // 'domain' => null,
-        // 'middleware' => null,
     ],
 
     // set to null if you want to keep snake_case
@@ -124,50 +102,27 @@ return [
     'swagger_ui' => [
         'enabled' => true,
         'apiKeys' => [
-            'api' => [
+            'sanctum' => [
                 'name' => 'Authorization',
                 'type' => 'header',
+                'in' => 'header',
+                'description' => 'Send "Bearer {token}" — Sanctum personal access token',
             ],
         ],
-        'oauth' => [
-            'enabled' => true,
-            'type' => 'oauth2',
-            'flow' => 'authorizationCode',
-            'tokenUrl' => '',
-            'authorizationUrl' =>'',
-            'refreshUrl' => '',
-            'scopes' => ['scope1' => 'Description scope 1'],
-            'pkce' => true,
-        ],
-        'license' => [
-            'name' => 'MIT License',
-            'url' => 'https://github.com/bagisto/bagisto?tab=MIT-1-ov-file#readme',
-        ],
-        'contact' => [
-            'name' => 'API Support',
-            'url' => 'https://bagisto.com/en/contacts/',
-            'email' => 'support@bagisto.com',
-        ],
         'http_auth' => [
-            'Personal Access Token' => [
+            'sanctum' => [
                 'scheme' => 'bearer',
                 'bearerFormat' => 'JWT',
             ],
         ],
     ],
 
-    // 'openapi' => [
-    //     'tags' => [],
-    // ],
-
     'url_generation_strategy' => UrlGeneratorInterface::ABS_PATH,
 
     'serializer' => [
         'hydra_prefix' => false,
-        // 'datetime_format' => \DateTimeInterface::RFC3339,
     ],
 
-    // we recommend using "file" or "acpu"
     'cache' => 'file',
 
     'http_cache' => [

@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\ApiResource;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 use Webkul\ApiResources\Models\Attribute\Attribute;
 use Webkul\ApiResources\Models\Attribute\AttributeFamily;
 use Webkul\ApiResources\Models\CatalogRule\CatalogRuleProductPrice;
@@ -14,14 +15,143 @@ use Webkul\ApiResources\Models\Category\Category;
 use Webkul\ApiResources\Models\Core\Channel;
 use Webkul\ApiResources\Models\Inventory\InventorySource;
 use Webkul\BookingProduct\Models\BookingProductProxy;
-use Webkul\Core\Models\ChannelProxy;
-use Webkul\Product\Models\ProductBundleOptionProxy;
 use Webkul\Product\Models\ProductDownloadableLinkProxy;
 use Webkul\Product\Models\ProductDownloadableSampleProxy;
 
 #[ApiResource]
 class Product extends \Webkul\Product\Models\Product
 {
+    protected $appends = ['all_attributes'];
+
+     public function getAllAttributesAttribute()
+    {
+        $attributes = [];
+
+        if (!isset($this->id) || !$this->attribute_family) {
+            return $attributes;
+        }
+
+        $familyAttributes = $this->checkInLoadedFamilyAttributes();
+
+        $requestedLocales = $this->getRequestedLocales();
+
+        $requestedChannels = $this->getRequestedChannels();
+
+        foreach ($familyAttributes as $attribute) {
+
+            if ($attribute->value_per_locale) {
+
+                if (count($requestedLocales) === 1 && $requestedLocales[0] === core()->getDefaultLocaleCodeFromDefaultChannel()) {
+                    $attributes[$attribute->code] = $this->getAttributeValueForLocale($attribute, $requestedLocales[0]);
+                } else {
+                    foreach ($requestedLocales as $locale) {
+
+                        if ($attribute->value_per_channel) {
+
+                            foreach ($requestedChannels as $channel) {
+                                $value = $this->getAttributeValueForLocaleAndChannel($attribute, $locale, $channel);
+                                $attributes[$attribute->code][$channel][$locale] = $value;
+                            }
+
+                        } else {
+                            $value = $this->getAttributeValueForLocale($attribute, $locale);
+
+                            $attributes[$attribute->code][$locale] = $value;
+                        }
+                    }
+                }
+
+            } else {
+
+                $attributes[$attribute->code] = $this->getCustomAttributeValue($attribute);
+
+            }
+        }
+
+        if ($this->isGraphQLRequest()) {
+            return json_encode($attributes);
+        }
+
+        return $attributes;
+    }
+
+    /**
+     * Check if the current request is a GraphQL request
+     */
+    protected function isGraphQLRequest(): bool
+    {
+        return request()->is('graphql') ||
+               request()->is('api/graphql') ||
+               request()->header('Content-Type') === 'application/graphql' ||
+               request()->has('query');
+    }
+
+    /**
+     * Get requested locales from query parameter
+     *
+     * @return array
+     */
+    protected function getRequestedLocales(): array
+    {
+        $localesParam = request()->query('locales');
+
+        if ($localesParam) {
+            $locales = array_map('trim', explode(',', $localesParam));
+
+            $availableLocales = core()->getAllLocales()->pluck('code')->toArray();
+
+            $locales = array_intersect($locales, $availableLocales);
+
+            return !empty($locales) ? $locales : [core()->getDefaultLocaleCodeFromDefaultChannel()];
+        }
+
+        return [core()->getDefaultLocaleCodeFromDefaultChannel()];
+    }
+
+    /**
+     * Get requested channels from query parameter
+     *
+     * @return array
+     */
+    protected function getRequestedChannels(): array
+    {
+        $channelsParam = request()->query('channels');
+
+        if ($channelsParam) {
+
+            $channels = array_map('trim', explode(',', $channelsParam));
+
+            $availableChannels = core()->getAllChannels()->pluck('code')->toArray();
+
+            $channels = array_intersect($channels, $availableChannels);
+
+            return !empty($channels) ? $channels : [core()->getDefaultChannelCode()];
+        }
+
+        return [core()->getDefaultChannelCode()];
+    }
+
+    protected function getAttributeValueForLocale($attribute, $locale)
+    {
+        $attributeValue = $this->attribute_values
+            ->where('locale', $locale)
+            ->where('attribute_id', $attribute->id)
+            ->first();
+
+        return $attributeValue[$attribute->column_name] ?? $attribute->default_value;
+    }
+
+    protected function getAttributeValueForLocaleAndChannel($attribute, $locale, $channel)
+    {
+        $attributeValue = $this->attribute_values
+            ->where('channel', $channel)
+            ->where('locale', $locale)
+            ->where('attribute_id', $attribute->id)
+            ->first();
+
+        return $attributeValue[$attribute->column_name] ?? $attribute->default_value;
+    }
+
     public function product_flats(): HasMany
     {
         return $this->hasMany(ProductFlat::class, 'product_id');
@@ -30,12 +160,6 @@ class Product extends \Webkul\Product\Models\Product
     public function attribute_family(): BelongsTo
     {
         return $this->belongsTo(AttributeFamily::class);
-    }
-
-    #[ApiProperty(readableLink: true)]
-    public function getSuperAttributes()
-    {
-        return $this->super_attributes;
     }
 
     public function super_attributes(): BelongsToMany
@@ -124,18 +248,6 @@ class Product extends \Webkul\Product\Models\Product
     {
         return $this->belongsToMany(InventorySource::class, 'product_inventories')
             ->withPivot('id', 'qty');
-    }
-
-    /**
-     * Get inventory source quantity.
-     *
-     * @return bool
-     */
-    public function inventory_source_qty($inventorySourceId)
-    {
-        return $this->inventories()
-            ->where('inventory_source_id', $inventorySourceId)
-            ->sum('qty');
     }
 
     /**

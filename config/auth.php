@@ -50,6 +50,11 @@ return [
             'driver' => 'sanctum',
             'provider' => 'admins',
         ],
+
+        'api' => [
+            'driver' => 'jwt',
+            'provider' => 'admins',
+        ],
     ],
 
     /*

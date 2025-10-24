@@ -20,6 +20,10 @@ class ApiPlatformServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (class_exists(\Nuwave\Lighthouse\Schema\TypeRegistry::class)) {
+            app(\Nuwave\Lighthouse\Schema\TypeRegistry::class)
+                ->register(new \Webkul\ApiResources\GraphQL\Types\JsonType());
+        }
     }
 
     /**
