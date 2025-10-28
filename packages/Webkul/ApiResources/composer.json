@@ -14,6 +14,11 @@
             "Webkul\\ApiResources\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Webkul\\ApiResources\\Tests\\": "tests/"
+        }
+    },
     "extra": {
         "laravel": {
             "providers": [

@@ -9,7 +9,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Webkul\ApiResources\Models\Category\Category;
 use Webkul\ApiResources\Models\Inventory\InventorySource;
 
-#[ApiResource]
+#[ApiResource(
+    description: 'Channel resource',
+    routePrefix: '/api/v1/admin',
+    security: "is_granted('ROLE_ADMIN')"
+)]
 class Channel extends \Webkul\Core\Models\Channel
 {
     #[ApiProperty(readableLink: true)]

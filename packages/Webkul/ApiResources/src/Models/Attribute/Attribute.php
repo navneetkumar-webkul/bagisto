@@ -3,15 +3,17 @@
 namespace Webkul\ApiResources\Models\Attribute;
 
 use ApiPlatform\Metadata\ApiResource;
-
-use Illuminate\Database\Eloquent\Model;
+use ApiPlatform\Metadata\ApiProperty;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use GraphQL\Error\UserError;
 use Webkul\ApiResources\Http\Requests\AttributeFormRequest;
 
-
-#[ApiResource (
+#[ApiResource(
+    shortName: 'Attribute',
+    description: 'Product attribute resource',
     rules: AttributeFormRequest::class,
+    routePrefix: '/api/v1/admin',
     security: "is_granted('ROLE_ADMIN')"
 )]
 class Attribute extends \Webkul\Attribute\Models\Attribute
@@ -22,7 +24,7 @@ class Attribute extends \Webkul\Attribute\Models\Attribute
     {
         parent::boot();
 
-        static::creating(function (Model $model) {
+        static::creating(function (EloquentModel $model) {
             if (static::where('code', $model->code)->exists()) {
                 // Throw GraphQL-friendly error
                 throw new UserError("The attribute code '{$model->code}' already exists.");
@@ -30,9 +32,7 @@ class Attribute extends \Webkul\Attribute\Models\Attribute
         });
     }
 
-    /**
-     * Get the options.
-     */
+    #[ApiProperty(readableLink: true)]
     public function options(): HasMany
     {
         return $this->hasMany(AttributeOption::class);

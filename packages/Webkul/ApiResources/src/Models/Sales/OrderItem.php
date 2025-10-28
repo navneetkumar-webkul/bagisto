@@ -11,7 +11,11 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Webkul\Product\Models\ProductProxy;
 use Webkul\Sales\Models\OrderItemProxy;
 
-#[ApiResource]
+#[ApiResource(
+    description: 'Order Item  resource',
+    routePrefix: '/api/v1/admin',
+    security: "is_granted('ROLE_ADMIN')"
+)]
 class OrderItem extends \Webkul\Sales\Models\OrderItem
 {
     /**

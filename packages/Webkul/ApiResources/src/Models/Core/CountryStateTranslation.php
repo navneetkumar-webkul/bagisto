@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 
 #[ApiResource(
+    routePrefix: '/api/v1/admin',
     operations: [
         new GetCollection(),
         new Get(),

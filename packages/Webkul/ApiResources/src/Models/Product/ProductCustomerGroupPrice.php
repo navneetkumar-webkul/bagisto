@@ -4,7 +4,11 @@ namespace Webkul\ApiResources\Models\Product;
 
 use ApiPlatform\Metadata\ApiResource;
 
-#[ApiResource]
+#[ApiResource(
+    description: 'Product Customer Group Price resource',
+    routePrefix: '/api/v1/admin',
+    security: "is_granted('ROLE_ADMIN')"
+)]
 class ProductCustomerGroupPrice extends \Webkul\Product\Models\ProductCustomerGroupPrice
 {
 }

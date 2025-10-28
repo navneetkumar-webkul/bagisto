@@ -5,7 +5,11 @@ namespace Webkul\ApiResources\Models\Attribute;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 
-#[ApiResource]
+#[ApiResource(
+    description: 'Attribute Option resource',
+    routePrefix: '/api/v1/admin',
+    security: "is_granted('ROLE_ADMIN')"
+)]
 class AttributeOption extends \Webkul\Attribute\Models\AttributeOption
 {
     #[ApiProperty(readableLink: true)]

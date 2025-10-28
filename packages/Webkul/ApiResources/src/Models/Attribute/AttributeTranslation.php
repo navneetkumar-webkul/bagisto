@@ -4,8 +4,12 @@ namespace Webkul\ApiResources\Models\Attribute;
 
 use ApiPlatform\Metadata\ApiResource;
 
-#[ApiResource]
+#[ApiResource(
+    description: 'Attribute Translation  resource',
+    routePrefix: '/api/v1/admin',
+    security: "is_granted('ROLE_ADMIN')"
+)]
 class AttributeTranslation extends \Webkul\Attribute\Models\AttributeTranslation
 {
-    
+
 }

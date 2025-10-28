@@ -7,7 +7,11 @@ use ApiPlatform\Metadata\ApiResource;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Webkul\Sales\Models\ShipmentItemProxy;
 
-#[ApiResource]
+#[ApiResource(
+    description: 'Shipment  resource',
+    routePrefix: '/api/v1/admin',
+    security: "is_granted('ROLE_ADMIN')"
+)]
 class Shipment extends \Webkul\Sales\Models\Shipment
 {
     /**

@@ -4,7 +4,12 @@ namespace Webkul\ApiResources\Models\Marketing;
 
 use ApiPlatform\Metadata\ApiResource;
 
-#[ApiResource]
+#[ApiResource(
+    shortName: 'UrlRewrite',
+    description: 'URL Rewrite resource',
+    routePrefix: '/api/v1/admin',
+    security: "is_granted('ROLE_ADMIN')"
+)]
 class URLRewrite extends \Webkul\Marketing\Models\URLRewrite
 {
 }

@@ -18,7 +18,11 @@ use Webkul\ApiResources\Models\Sales\OrderPayment;
 use Webkul\ApiResources\Models\Sales\OrderTransaction;
 use Webkul\ApiResources\Models\Sales\Refund;
 
-#[ApiResource]
+#[ApiResource(
+    description: 'Order  resource',
+    routePrefix: '/api/v1/admin',
+    security: "is_granted('ROLE_ADMIN')"
+)]
 class Order extends \Webkul\Sales\Models\Order
 {
     /**

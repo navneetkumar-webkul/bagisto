@@ -4,7 +4,11 @@ namespace Webkul\ApiResources\Models\Marketing;
 
 use ApiPlatform\Metadata\ApiResource;
 
-#[ApiResource]
+#[ApiResource(
+    description: 'Search Term resource',
+    routePrefix: '/api/v1/admin',
+    security: "is_granted('ROLE_ADMIN')"
+)]
 class SearchTerm extends \Webkul\Marketing\Models\SearchTerm
 {
 }

@@ -4,7 +4,11 @@ namespace Webkul\ApiResources\Models\Attribute;
 
 use ApiPlatform\Metadata\ApiResource;
 
-#[ApiResource]
+#[ApiResource(
+    description: 'Attribute Group resource',
+    routePrefix: '/api/v1/admin',
+    security: "is_granted('ROLE_ADMIN')"
+)]
 class AttributeGroup extends \Webkul\Attribute\Models\AttributeGroup
 {
 }

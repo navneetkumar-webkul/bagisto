@@ -1,0 +1,37 @@
+type Mutation {
+    login(input: LoginInput!): LoginPayload @field(resolver: "Webkul\\ApiResources\\GraphQL\\Mutations\\LoginResolver")
+    logout: LogoutPayload @field(resolver: "Webkul\\ApiResources\\GraphQL\\Mutations\\LogoutResolver")
+    forgotPassword(input: ForgotPasswordInput!): ForgotPasswordPayload @field(resolver: "Webkul\\ApiResources\\GraphQL\\Mutations\\ForgotPasswordResolver")
+}
+
+input LoginInput {
+    email: String! @rules(apply: ["required", "email"])
+    password: String! @rules(apply: ["required"])
+    deviceName: String
+}
+
+input ForgotPasswordInput {
+    email: String! @rules(apply: ["required", "email"])
+}
+
+type LoginPayload {
+    message: String!
+    token: String!
+    user: User!
+}
+
+type LogoutPayload {
+    message: String!
+    success: Boolean!
+}
+
+type ForgotPasswordPayload {
+    message: String!
+    success: Boolean!
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+}

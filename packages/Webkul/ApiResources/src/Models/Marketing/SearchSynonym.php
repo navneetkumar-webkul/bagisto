@@ -4,7 +4,11 @@ namespace Webkul\ApiResources\Models\Marketing;
 
 use ApiPlatform\Metadata\ApiResource;
 
-#[ApiResource]
+#[ApiResource(
+    description: 'Search Synonym resource',
+    routePrefix: '/api/v1/admin',
+    security: "is_granted('ROLE_ADMIN')"
+)]
 class SearchSynonym extends \Webkul\Marketing\Models\SearchSynonym
 {
 }

@@ -18,7 +18,11 @@ use Webkul\BookingProduct\Models\BookingProductProxy;
 use Webkul\Product\Models\ProductDownloadableLinkProxy;
 use Webkul\Product\Models\ProductDownloadableSampleProxy;
 
-#[ApiResource]
+#[ApiResource(
+    description: 'Product resource',
+    routePrefix: '/api/v1/admin',
+    security: "is_granted('ROLE_ADMIN')"
+)]
 class Product extends \Webkul\Product\Models\Product
 {
     protected $appends = ['all_attributes'];

@@ -70,7 +70,7 @@ class Authenticate extends Middleware
     protected function unauthenticated($request, array $guards)
     {
         throw new AuthenticationException(
-            'Unauthorized',
+            __('Unauthenticated: missing or invalid access token.'),
             $guards
         );
     }

@@ -4,17 +4,8 @@ namespace Webkul\ApiResources\Auth;
 
 use ApiPlatform\Metadata\ApiResource;
 
-#[ApiResource]
-class AuthResource
-{
-}
-    {
-        $this->data = $data;
-    }
-}
-
 #[ApiResource(
-    operations: []
+    operations: [
         new Post(
             uriTemplate: '/auth/logout',
             controller: AuthController::class . '::logout',

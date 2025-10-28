@@ -20,11 +20,6 @@ return [
         'domain' => null,
     ],
 
-    'swagger_ui' => [
-        'enabled' => true,
-        'middleware' => ['api'],
-    ],
-
     'resources' => [
         base_path('packages/Webkul/ApiResources/'),
     ],
@@ -32,6 +27,7 @@ return [
     'formats' => [
         'jsonld' => ['application/ld+json'],
         'json' => ['application/json'],
+        'html' => ['text/html'],
     ],
 
     'patch_formats' => [
@@ -82,15 +78,9 @@ return [
         'max_query_depth' => 200,
         'route_prefix' => '/api/v1/graphql',
         'middleware' => [
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            'auth:sanctum',
+            \Webkul\ApiResources\Http\Middleware\GraphQLAuthMiddleware::class.':sanctum',
         ],
     ],
-
-    'graphiql' => [
-        'enabled' => true,
-    ],
-
     // set to null if you want to keep snake_case
     'name_converter' => SnakeCaseToCamelCaseNameConverter::class,
 
@@ -125,20 +115,24 @@ return [
 
     'cache' => 'file',
 
-    'http_cache' => [
-        'etag' => true,
-        'max_age' => 3600,
-        'shared_max_age' => 3600,
-        'vary' => ['Accept', 'Authorization'],
-        'public' => true,
-        'stale_while_revalidate' => 60,
-        'stale_if_error' => 3600,
-        'invalidation' => [
-            'urls' => [],
-            'scoped_clients' => [],
-            'max_header_length' => 7500,
-            'request_options' => [],
-            'purger' => ApiPlatform\HttpCache\SouinPurger::class,
-        ],
+    'validation' => [
+        'enabled' => true,
     ],
+
+    // 'http_cache' => [
+    //     'etag' => true,
+    //     'max_age' => 3600,
+    //     'shared_max_age' => 3600,
+    //     'vary' => ['Accept', 'Authorization'],
+    //     'public' => true,
+    //     'stale_while_revalidate' => 60,
+    //     'stale_if_error' => 3600,
+    //     'invalidation' => [
+    //         'urls' => [],
+    //         'scoped_clients' => [],
+    //         'max_header_length' => 7500,
+    //         'request_options' => [],
+    //         // 'purger' => ApiPlatform\HttpCache\SouinPurger::class,
+    //     ],
+    // ],
 ];

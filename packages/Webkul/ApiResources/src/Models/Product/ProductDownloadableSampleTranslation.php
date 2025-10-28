@@ -4,7 +4,11 @@ namespace Webkul\ApiResources\Models\Product;
 
 use ApiPlatform\Metadata\ApiResource;
 
-#[ApiResource]
+#[ApiResource(
+    description: 'Product Downloadable Sample Translation resource',
+    routePrefix: '/api/v1/admin',
+    security: "is_granted('ROLE_ADMIN')"
+)]
 class ProductDownloadableSampleTranslation extends \Webkul\Product\Models\ProductDownloadableSampleTranslation
 {
 }

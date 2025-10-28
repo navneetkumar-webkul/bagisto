@@ -7,7 +7,11 @@ use ApiPlatform\Metadata\ApiResource;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Webkul\Sales\Models\InvoiceItemProxy;
 
-#[ApiResource]
+#[ApiResource(
+    description: 'Invoice  resource',
+    routePrefix: '/api/v1/admin',
+    security: "is_granted('ROLE_ADMIN')"
+)]
 class Invoice extends \Webkul\Sales\Models\Invoice
 {
     /**

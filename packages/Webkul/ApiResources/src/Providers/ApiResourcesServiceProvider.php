@@ -17,6 +17,12 @@ class ApiResourcesServiceProvider extends ServiceProvider
         // Override the default Authenticate middleware for API routes
         $this->app['router']->aliasMiddleware('api.auth', \Webkul\ApiResources\Http\Middleware\Authenticate::class);
 
+        // Register Shop (Customer) authentication middleware
+        $this->app['router']->aliasMiddleware('api.shop.auth', \Webkul\ApiResources\Http\Middleware\ShopAuthenticate::class);
+
+        // Register GraphQL authentication middleware
+        $this->app['router']->aliasMiddleware('graphql.auth', \Webkul\ApiResources\Http\Middleware\GraphQLAuthMiddleware::class);
+
         $this->mergeConfigFrom(
             __DIR__ . '/../Config/graphql.php',
             'graphql'
@@ -47,6 +53,11 @@ class ApiResourcesServiceProvider extends ServiceProvider
         // Admin authentication routes
         Route::group(['prefix' => 'api/v1/admin', 'middleware' => ['api']], function () {
             $this->loadRoutesFrom(__DIR__ . '/../routes/admin_auth.php');
+        });
+
+        // Shop (Customer) authentication routes
+        Route::group(['prefix' => 'api/v1/shop/auth', 'middleware' => ['api']], function () {
+            $this->loadRoutesFrom(__DIR__ . '/../routes/shop_auth.php');
         });
     }
 }
