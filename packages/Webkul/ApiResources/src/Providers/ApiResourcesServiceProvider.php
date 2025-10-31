@@ -27,6 +27,19 @@ class ApiResourcesServiceProvider extends ServiceProvider
             __DIR__ . '/../Config/graphql.php',
             'graphql'
         );
+
+        $this->app->bind(\Webkul\ApiResources\State\AuthProcessor::class, function ($app) {
+            return new \Webkul\ApiResources\State\AuthProcessor();
+        });
+
+        $this->app->bind(\Webkul\ApiResources\State\Admin\ChannelProcessor::class, function ($app) {
+            return new \Webkul\ApiResources\State\Admin\ChannelProcessor();
+        });
+
+        $this->app->tag([
+            \Webkul\ApiResources\State\AuthProcessor::class,
+            \Webkul\ApiResources\State\Admin\ChannelProcessor::class,
+        ], \ApiPlatform\State\ProcessorInterface::class);
     }
 
     /**
