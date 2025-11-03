@@ -3,6 +3,9 @@
 namespace Webkul\ApiResources\Auth;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use Webkul\ApiResources\Http\Controllers\AuthController;
 
 #[ApiResource(
     operations: [
