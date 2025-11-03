@@ -9,6 +9,4 @@ use ApiPlatform\Metadata\ApiResource;
     routePrefix: '/api/v1/admin',
     security: "is_granted('ROLE_ADMIN')"
 )]
-class SearchSynonym extends \Webkul\Marketing\Models\SearchSynonym
-{
-}
+class SearchSynonym extends \Webkul\Marketing\Models\SearchSynonym {}

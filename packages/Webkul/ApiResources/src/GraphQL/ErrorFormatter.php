@@ -14,9 +14,9 @@ class ErrorFormatter
         // Handle Laravel validation exceptions
         if ($previous instanceof ValidationException) {
             return [
-                'message' => 'Validation error',
+                'message'    => 'Validation error',
                 'extensions' => [
-                    'category' => 'validation',
+                    'category'   => 'validation',
                     'validation' => $previous->errors(),
                 ],
             ];
@@ -24,7 +24,7 @@ class ErrorFormatter
 
         // Handle all other exceptions
         return [
-            'message' => $error->getMessage() ?: 'Unexpected error occurred.',
+            'message'    => $error->getMessage() ?: 'Unexpected error occurred.',
             'extensions' => [
                 'category' => 'internal',
             ],

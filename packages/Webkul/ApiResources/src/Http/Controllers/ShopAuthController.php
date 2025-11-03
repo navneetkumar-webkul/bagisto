@@ -2,10 +2,10 @@
 
 namespace Webkul\ApiResources\Http\Controllers;
 
-use Webkul\Customer\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Webkul\Customer\Models\Customer;
 
 class ShopAuthController extends Controller
 {
@@ -16,16 +16,16 @@ class ShopAuthController extends Controller
     {
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:customers,email',
-            'password' => 'required|min:8|confirmed',
+            'last_name'  => 'required|string|max:255',
+            'email'      => 'required|email|unique:customers,email',
+            'password'   => 'required|min:8|confirmed',
         ]);
 
         $customer = Customer::create([
             'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
+            'last_name'  => $validated['last_name'],
+            'email'      => $validated['email'],
+            'password'   => Hash::make($validated['password']),
             'channel_id' => 1, // Default channel, adjust as needed
         ]);
 
@@ -33,9 +33,9 @@ class ShopAuthController extends Controller
 
         return response()->json([
             'message' => 'Customer registered successfully',
-            'data' => [
+            'data'    => [
                 'customer' => $customer,
-                'token' => $token,
+                'token'    => $token,
             ],
         ], 201);
     }
@@ -46,13 +46,13 @@ class ShopAuthController extends Controller
     public function login(Request $request)
     {
         $validated = $request->validate([
-            'email' => 'required|email',
+            'email'    => 'required|email',
             'password' => 'required|min:6',
         ]);
 
         $customer = Customer::where('email', $validated['email'])->first();
 
-        if (!$customer || !Hash::check($validated['password'], $customer->password)) {
+        if (! $customer || ! Hash::check($validated['password'], $customer->password)) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);
@@ -65,9 +65,9 @@ class ShopAuthController extends Controller
 
         return response()->json([
             'message' => 'Login successful',
-            'data' => [
+            'data'    => [
                 'customer' => $customer,
-                'token' => $token,
+                'token'    => $token,
             ],
         ]);
     }
@@ -91,16 +91,16 @@ class ShopAuthController extends Controller
 
         $validated = $request->validate([
             'first_name' => 'string|max:255',
-            'last_name' => 'string|max:255',
-            'email' => 'email|unique:customers,email,' . $customer->id,
-            'phone' => 'nullable|string|max:20',
+            'last_name'  => 'string|max:255',
+            'email'      => 'email|unique:customers,email,'.$customer->id,
+            'phone'      => 'nullable|string|max:20',
         ]);
 
         $customer->update($validated);
 
         return response()->json([
             'message' => 'Profile updated successfully',
-            'data' => $customer,
+            'data'    => $customer,
         ]);
     }
 
@@ -111,12 +111,12 @@ class ShopAuthController extends Controller
     {
         $validated = $request->validate([
             'current_password' => 'required',
-            'password' => 'required|min:8|confirmed',
+            'password'         => 'required|min:8|confirmed',
         ]);
 
         $customer = $request->user();
 
-        if (!Hash::check($validated['current_password'], $customer->password)) {
+        if (! Hash::check($validated['current_password'], $customer->password)) {
             throw ValidationException::withMessages([
                 'current_password' => ['The provided password is incorrect.'],
             ]);
@@ -166,8 +166,8 @@ class ShopAuthController extends Controller
     public function resetPassword(Request $request)
     {
         $validated = $request->validate([
-            'token' => 'required',
-            'email' => 'required|email|exists:customers,email',
+            'token'    => 'required',
+            'email'    => 'required|email|exists:customers,email',
             'password' => 'required|min:8|confirmed',
         ]);
 

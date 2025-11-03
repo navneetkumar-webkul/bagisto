@@ -4,11 +4,11 @@ namespace Webkul\ApiResources\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Webkul\Core\Models\Channel;
-use Webkul\Core\Models\Currency;
-use Webkul\Core\Models\Locale;
 use Webkul\Core\Models\Country;
 use Webkul\Core\Models\CountryState;
+use Webkul\Core\Models\Currency;
 use Webkul\Core\Models\CurrencyExchangeRate;
+use Webkul\Core\Models\Locale;
 use Webkul\Customer\Models\CustomerGroup;
 use Webkul\Tax\Models\TaxCategory;
 use Webkul\Tax\Models\TaxRate;
@@ -22,7 +22,7 @@ class ApiPlatformServiceProvider extends ServiceProvider
     {
         if (class_exists(\Nuwave\Lighthouse\Schema\TypeRegistry::class)) {
             app(\Nuwave\Lighthouse\Schema\TypeRegistry::class)
-                ->register(new \Webkul\ApiResources\GraphQL\Types\JsonType());
+                ->register(new \Webkul\ApiResources\GraphQL\Types\JsonType);
         }
     }
 
@@ -47,8 +47,8 @@ class ApiPlatformServiceProvider extends ServiceProvider
 
         $this->app->singleton(Currency::class, function () {
             return Currency::first() ?? Currency::create([
-                'code' => 'USD',
-                'name' => 'US Dollar',
+                'code'   => 'USD',
+                'name'   => 'US Dollar',
                 'symbol' => '$',
             ]);
         });

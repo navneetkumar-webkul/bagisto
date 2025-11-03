@@ -2,8 +2,8 @@
 
 namespace Webkul\ApiResources\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\ServiceProvider;
 
 class ApiResourcesServiceProvider extends ServiceProvider
 {
@@ -24,16 +24,18 @@ class ApiResourcesServiceProvider extends ServiceProvider
         $this->app['router']->aliasMiddleware('graphql.auth', \Webkul\ApiResources\Http\Middleware\GraphQLAuthMiddleware::class);
 
         $this->mergeConfigFrom(
-            __DIR__ . '/../Config/graphql.php',
+            __DIR__.'/../Config/graphql.php',
             'graphql'
         );
 
         $this->app->bind(\Webkul\ApiResources\State\AuthProcessor::class, function ($app) {
-            return new \Webkul\ApiResources\State\AuthProcessor();
+            return new \Webkul\ApiResources\State\AuthProcessor;
         });
 
         $this->app->bind(\Webkul\ApiResources\State\Admin\ChannelProcessor::class, function ($app) {
-            return new \Webkul\ApiResources\State\Admin\ChannelProcessor();
+            return new \Webkul\ApiResources\State\Admin\ChannelProcessor(
+                $app->make(\Webkul\Core\Repositories\ChannelRepository::class)
+            );
         });
 
         $this->app->tag([
@@ -49,12 +51,21 @@ class ApiResourcesServiceProvider extends ServiceProvider
     {
         $this->registerApiRoutes();
 
+        $this->loadTranslationsFrom(
+            __DIR__.'/../Resources/lang',
+            'api-resources'
+        );
+
         $this->publishes([
-            __DIR__ . '/../Config/graphql.php' => config_path('graphql.php'),
+            __DIR__.'/../Resources/lang' => lang_path('vendor/api-resources'),
+        ], 'api-resources-lang');
+
+        $this->publishes([
+            __DIR__.'/../Config/graphql.php' => config_path('graphql.php'),
         ], 'config');
 
         $this->publishes([
-            __DIR__ . '/../Config/api-platform.php' => config_path('api-platform.php'),
+            __DIR__.'/../Config/api-platform.php' => config_path('api-platform.php'),
         ], 'config');
     }
 
@@ -65,12 +76,12 @@ class ApiResourcesServiceProvider extends ServiceProvider
     {
         // Admin authentication routes
         Route::group(['prefix' => 'api/v1/admin', 'middleware' => ['api']], function () {
-            $this->loadRoutesFrom(__DIR__ . '/../routes/admin_auth.php');
+            $this->loadRoutesFrom(__DIR__.'/../routes/admin_auth.php');
         });
 
         // Shop (Customer) authentication routes
         Route::group(['prefix' => 'api/v1/shop/auth', 'middleware' => ['api']], function () {
-            $this->loadRoutesFrom(__DIR__ . '/../routes/shop_auth.php');
+            $this->loadRoutesFrom(__DIR__.'/../routes/shop_auth.php');
         });
     }
 }

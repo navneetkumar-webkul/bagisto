@@ -2,8 +2,6 @@
 
 namespace Webkul\ApiResources\Http\Middleware;
 
-use Closure;
-use Illuminate\Http\Request;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;
 
 class SkipCsrfForApi extends BaseVerifier

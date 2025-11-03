@@ -6,7 +6,5 @@ use ApiPlatform\Metadata\ApiResource;
 
 #[ApiResource(
     routePrefix: '/api/v1/admin',
-    )]
-class ProductCustomizableOptionTranslation extends \Webkul\Product\Models\ProductCustomizableOptionTranslation
-{
-}
+)]
+class ProductCustomizableOptionTranslation extends \Webkul\Product\Models\ProductCustomizableOptionTranslation {}

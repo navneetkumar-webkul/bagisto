@@ -11,7 +11,6 @@ class ShopAuthenticate extends Middleware
     /**
      * Create a new middleware instance.
      *
-     * @param  \Illuminate\Contracts\Auth\Factory  $auth
      * @return void
      */
     public function __construct(AuthFactory $auth)
@@ -24,14 +23,13 @@ class ShopAuthenticate extends Middleware
      * Ensures only customers can access protected routes.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  array  $guards
      * @return void
      *
      * @throws \Illuminate\Auth\AuthenticationException
      */
     public function authenticate($request, array $guards)
     {
-        if (!$this->isAuthenticated($request, $guards)) {
+        if (! $this->isAuthenticated($request, $guards)) {
             $this->unauthenticated($request, $guards);
         }
 
@@ -47,7 +45,6 @@ class ShopAuthenticate extends Middleware
      * Check if any of the guards are authenticated.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  array  $guards
      * @return bool
      */
     protected function isAuthenticated($request, array $guards)

@@ -2,12 +2,10 @@
 
 namespace Webkul\ApiResources\Models\Admin\Product;
 
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Symfony\Component\Serializer\Annotation\SerializedName;
 use Webkul\ApiResources\Models\Admin\Attribute\Attribute;
 use Webkul\ApiResources\Models\Admin\Attribute\AttributeFamily;
 use Webkul\ApiResources\Models\Admin\CatalogRule\CatalogRuleProductPrice;
@@ -27,11 +25,11 @@ class Product extends \Webkul\Product\Models\Product
 {
     protected $appends = ['all_attributes'];
 
-     public function getAllAttributesAttribute()
+    public function getAllAttributesAttribute()
     {
         $attributes = [];
 
-        if (!isset($this->id) || !$this->attribute_family) {
+        if (! isset($this->id) || ! $this->attribute_family) {
             return $attributes;
         }
 
@@ -92,8 +90,6 @@ class Product extends \Webkul\Product\Models\Product
 
     /**
      * Get requested locales from query parameter
-     *
-     * @return array
      */
     protected function getRequestedLocales(): array
     {
@@ -106,7 +102,7 @@ class Product extends \Webkul\Product\Models\Product
 
             $locales = array_intersect($locales, $availableLocales);
 
-            return !empty($locales) ? $locales : [core()->getDefaultLocaleCodeFromDefaultChannel()];
+            return ! empty($locales) ? $locales : [core()->getDefaultLocaleCodeFromDefaultChannel()];
         }
 
         return [core()->getDefaultLocaleCodeFromDefaultChannel()];
@@ -114,8 +110,6 @@ class Product extends \Webkul\Product\Models\Product
 
     /**
      * Get requested channels from query parameter
-     *
-     * @return array
      */
     protected function getRequestedChannels(): array
     {
@@ -129,7 +123,7 @@ class Product extends \Webkul\Product\Models\Product
 
             $channels = array_intersect($channels, $availableChannels);
 
-            return !empty($channels) ? $channels : [core()->getDefaultChannelCode()];
+            return ! empty($channels) ? $channels : [core()->getDefaultChannelCode()];
         }
 
         return [core()->getDefaultChannelCode()];

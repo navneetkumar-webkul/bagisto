@@ -9,7 +9,7 @@ trait ApiResourcesTestBench
     /**
      * Create a test admin user.
      *
-     * @param array $attributes Custom attributes for the admin
+     * @param  array  $attributes  Custom attributes for the admin
      * @return \Webkul\User\Models\Admin
      */
     public function createTestAdmin(array $attributes = [])
@@ -20,7 +20,7 @@ trait ApiResourcesTestBench
     /**
      * Login as admin and get authentication token.
      *
-     * @param \Webkul\User\Models\Admin|null $admin
+     * @param  \Webkul\User\Models\Admin|null  $admin
      * @return array Array containing the admin and token
      */
     public function loginAsAdminAPI($admin = null)
@@ -28,8 +28,8 @@ trait ApiResourcesTestBench
         $admin = $admin ?? $this->createTestAdmin();
 
         $response = $this->postJson('/api/v1/admin/login', [
-            'email' => $admin->email,
-            'password' => 'password', // Default password from factory
+            'email'       => $admin->email,
+            'password'    => 'password', // Default password from factory
             'device_name' => 'test-device',
         ]);
 
@@ -49,8 +49,8 @@ trait ApiResourcesTestBench
     public function getAdminCredentials()
     {
         return [
-            'email' => 'admin@example.com',
-            'password' => 'password',
+            'email'       => 'admin@example.com',
+            'password'    => 'password',
             'device_name' => 'test-device',
         ];
     }
@@ -58,15 +58,14 @@ trait ApiResourcesTestBench
     /**
      * Create authenticated request headers.
      *
-     * @param string $token
      * @return array
      */
     public function getAuthHeaders(string $token)
     {
         return [
             'Authorization' => "Bearer {$token}",
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
+            'Accept'        => 'application/json',
+            'Content-Type'  => 'application/json',
         ];
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Webkul\ApiResources\Models\Admin\Auth;
 
-use Illuminate\Database\Eloquent\Model;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
+use Illuminate\Database\Eloquent\Model;
 use Webkul\ApiResources\State\AuthProcessor;
 
 #[ApiResource(
@@ -22,7 +22,9 @@ use Webkul\ApiResources\State\AuthProcessor;
 class AuthenticationModel extends Model
 {
     protected $table = 'authentications';
+
     protected $fillable = ['email', 'password', 'device_name', 'token', 'message', 'user_id'];
+
     public $timestamps = false;
 
     #[ApiProperty(writable: false, readable: true)]

@@ -11,7 +11,6 @@ class Authenticate extends Middleware
     /**
      * Create a new middleware instance.
      *
-     * @param  \Illuminate\Contracts\Auth\Factory  $auth
      * @return void
      */
     public function __construct(AuthFactory $auth)
@@ -24,7 +23,6 @@ class Authenticate extends Middleware
      * Override to throw AuthenticationException directly instead of calling redirectTo().
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  array  $guards
      * @return void
      *
      * @throws \Illuminate\Auth\AuthenticationException
@@ -40,7 +38,6 @@ class Authenticate extends Middleware
      * Check if any of the guards are authenticated.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  array  $guards
      * @return bool
      */
     protected function isAuthenticated($request, array $guards)
@@ -62,7 +59,6 @@ class Authenticate extends Middleware
      * Handle an unauthenticated user by throwing an exception.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  array  $guards
      * @return void
      *
      * @throws \Illuminate\Auth\AuthenticationException

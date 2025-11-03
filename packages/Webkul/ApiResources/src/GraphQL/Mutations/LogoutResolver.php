@@ -10,7 +10,7 @@ class LogoutResolver
     {
         $user = Auth::guard('sanctum')->user();
 
-        if (!$user) {
+        if (! $user) {
             throw new \Exception('Unauthenticated', 401);
         }
 
@@ -19,7 +19,7 @@ class LogoutResolver
             $user->currentAccessToken()->delete();
         }
 
-        return (object)[
+        return (object) [
             'message' => 'Logged out successfully',
             'success' => true,
         ];

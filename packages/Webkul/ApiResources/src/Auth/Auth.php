@@ -27,24 +27,24 @@ use Symfony\Component\Serializer\Annotation\Groups;
                     content: new \ArrayObject([
                         'application/json' => [
                             'schema' => [
-                                'type' => 'object',
-                                'required' => ['email', 'password', 'device_name'],
+                                'type'       => 'object',
+                                'required'   => ['email', 'password', 'device_name'],
                                 'properties' => [
                                     'email' => [
-                                        'type' => 'string',
-                                        'format' => 'email',
-                                        'example' => 'admin@example.com',
+                                        'type'        => 'string',
+                                        'format'      => 'email',
+                                        'example'     => 'admin@example.com',
                                         'description' => 'Admin email address',
                                     ],
                                     'password' => [
-                                        'type' => 'string',
-                                        'format' => 'password',
-                                        'example' => 'admin123',
+                                        'type'        => 'string',
+                                        'format'      => 'password',
+                                        'example'     => 'admin123',
                                         'description' => 'Admin password',
                                     ],
                                     'device_name' => [
-                                        'type' => 'string',
-                                        'example' => 'Mobile',
+                                        'type'        => 'string',
+                                        'example'     => 'Mobile',
                                         'description' => 'Device name for token tracking',
                                     ],
                                 ],
@@ -58,21 +58,21 @@ use Symfony\Component\Serializer\Annotation\Groups;
                         content: new \ArrayObject([
                             'application/json' => [
                                 'schema' => [
-                                    'type' => 'object',
+                                    'type'       => 'object',
                                     'properties' => [
                                         'message' => [
-                                            'type' => 'string',
+                                            'type'    => 'string',
                                             'example' => 'Logged in successfully',
                                         ],
                                         'token' => [
-                                            'type' => 'string',
+                                            'type'        => 'string',
                                             'description' => 'Sanctum personal access token',
                                         ],
                                         'user' => [
-                                            'type' => 'object',
+                                            'type'       => 'object',
                                             'properties' => [
-                                                'id' => ['type' => 'integer'],
-                                                'name' => ['type' => 'string'],
+                                                'id'    => ['type' => 'integer'],
+                                                'name'  => ['type' => 'string'],
                                                 'email' => ['type' => 'string', 'format' => 'email'],
                                             ],
                                         ],
@@ -86,10 +86,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
                         content: new \ArrayObject([
                             'application/json' => [
                                 'schema' => [
-                                    'type' => 'object',
+                                    'type'       => 'object',
                                     'properties' => [
                                         'error' => [
-                                            'type' => 'string',
+                                            'type'    => 'string',
                                             'example' => 'Invalid credentials',
                                         ],
                                     ],
@@ -116,10 +116,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
                         content: new \ArrayObject([
                             'application/json' => [
                                 'schema' => [
-                                    'type' => 'object',
+                                    'type'       => 'object',
                                     'properties' => [
                                         'message' => [
-                                            'type' => 'string',
+                                            'type'    => 'string',
                                             'example' => 'Logged out successfully',
                                         ],
                                     ],
@@ -149,20 +149,20 @@ use Symfony\Component\Serializer\Annotation\Groups;
                         content: new \ArrayObject([
                             'application/json' => [
                                 'schema' => [
-                                    'type' => 'object',
+                                    'type'       => 'object',
                                     'properties' => [
                                         'message' => [
-                                            'type' => 'string',
+                                            'type'    => 'string',
                                             'example' => 'Admin details retrieved successfully',
                                         ],
                                         'data' => [
-                                            'type' => 'object',
+                                            'type'       => 'object',
                                             'properties' => [
-                                                'id' => ['type' => 'integer'],
-                                                'name' => ['type' => 'string'],
-                                                'email' => ['type' => 'string', 'format' => 'email'],
-                                                'status' => ['type' => 'integer'],
-                                                'image' => ['type' => 'string', 'nullable' => true],
+                                                'id'        => ['type' => 'integer'],
+                                                'name'      => ['type' => 'string'],
+                                                'email'     => ['type' => 'string', 'format' => 'email'],
+                                                'status'    => ['type' => 'integer'],
+                                                'image'     => ['type' => 'string', 'nullable' => true],
                                                 'image_url' => ['type' => 'string', 'format' => 'uri', 'nullable' => true],
                                             ],
                                         ],
@@ -193,29 +193,29 @@ use Symfony\Component\Serializer\Annotation\Groups;
                     content: new \ArrayObject([
                         'application/json' => [
                             'schema' => [
-                                'type' => 'object',
+                                'type'       => 'object',
                                 'properties' => [
                                     'name' => [
-                                        'type' => 'string',
-                                        'example' => 'John Doe',
+                                        'type'        => 'string',
+                                        'example'     => 'John Doe',
                                         'description' => 'Admin full name',
                                     ],
                                     'email' => [
-                                        'type' => 'string',
-                                        'format' => 'email',
-                                        'example' => 'admin@example.com',
+                                        'type'        => 'string',
+                                        'format'      => 'email',
+                                        'example'     => 'admin@example.com',
                                         'description' => 'Admin email address',
                                     ],
                                     'password' => [
-                                        'type' => 'string',
-                                        'format' => 'password',
-                                        'example' => 'newpassword123',
+                                        'type'        => 'string',
+                                        'format'      => 'password',
+                                        'example'     => 'newpassword123',
                                         'description' => 'New password (minimum 8 characters)',
                                     ],
                                     'password_confirmation' => [
-                                        'type' => 'string',
-                                        'format' => 'password',
-                                        'example' => 'newpassword123',
+                                        'type'        => 'string',
+                                        'format'      => 'password',
+                                        'example'     => 'newpassword123',
                                         'description' => 'Password confirmation must match password',
                                     ],
                                 ],
@@ -229,20 +229,20 @@ use Symfony\Component\Serializer\Annotation\Groups;
                         content: new \ArrayObject([
                             'application/json' => [
                                 'schema' => [
-                                    'type' => 'object',
+                                    'type'       => 'object',
                                     'properties' => [
                                         'message' => [
-                                            'type' => 'string',
+                                            'type'    => 'string',
                                             'example' => 'Admin profile updated successfully',
                                         ],
                                         'data' => [
-                                            'type' => 'object',
+                                            'type'       => 'object',
                                             'properties' => [
-                                                'id' => ['type' => 'integer'],
-                                                'name' => ['type' => 'string'],
-                                                'email' => ['type' => 'string', 'format' => 'email'],
-                                                'status' => ['type' => 'integer'],
-                                                'image' => ['type' => 'string', 'nullable' => true],
+                                                'id'        => ['type' => 'integer'],
+                                                'name'      => ['type' => 'string'],
+                                                'email'     => ['type' => 'string', 'format' => 'email'],
+                                                'status'    => ['type' => 'integer'],
+                                                'image'     => ['type' => 'string', 'nullable' => true],
                                                 'image_url' => ['type' => 'string', 'format' => 'uri', 'nullable' => true],
                                             ],
                                         ],
@@ -275,13 +275,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
                     content: new \ArrayObject([
                         'application/json' => [
                             'schema' => [
-                                'type' => 'object',
-                                'required' => ['email'],
+                                'type'       => 'object',
+                                'required'   => ['email'],
                                 'properties' => [
                                     'email' => [
-                                        'type' => 'string',
-                                        'format' => 'email',
-                                        'example' => 'admin@example.com',
+                                        'type'        => 'string',
+                                        'format'      => 'email',
+                                        'example'     => 'admin@example.com',
                                         'description' => 'Admin email address',
                                     ],
                                 ],
@@ -295,10 +295,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
                         content: new \ArrayObject([
                             'application/json' => [
                                 'schema' => [
-                                    'type' => 'object',
+                                    'type'       => 'object',
                                     'properties' => [
                                         'message' => [
-                                            'type' => 'string',
+                                            'type'    => 'string',
                                             'example' => 'Password reset link has been sent to your email',
                                         ],
                                     ],

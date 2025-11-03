@@ -4,7 +4,6 @@ namespace Webkul\ApiResources\Http\Controllers;
 
 use ApiPlatform\OpenApi\Factory\OpenApiFactoryInterface;
 use ApiPlatform\OpenApi\Model\Paths;
-use ArrayIterator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
@@ -12,9 +11,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class DocsController extends Controller
 {
-    public function __construct(private readonly OpenApiFactoryInterface $openApiFactory, private readonly SerializerInterface $serializer)
-    {
-    }
+    public function __construct(private readonly OpenApiFactoryInterface $openApiFactory, private readonly SerializerInterface $serializer) {}
 
     public function ui(Request $request, string $area): Response
     {
@@ -53,11 +50,11 @@ class DocsController extends Controller
 
         $openApi = $this->openApiFactory->__invoke($context);
 
-        $areaPath = rtrim('/' . trim($area, '/'), '/');
+        $areaPath = rtrim('/'.trim($area, '/'), '/');
 
         $paths = $openApi->getPaths()->getPaths();
 
-        $filtered = new Paths();
+        $filtered = new Paths;
 
         foreach ($paths as $path => $pathItem) {
             if ((function_exists('str_starts_with') && str_starts_with($path, $areaPath)) || strpos($path, $areaPath) === 0) {
@@ -89,7 +86,7 @@ class DocsController extends Controller
             } else {
                 $methods = ['get', 'post', 'put', 'patch', 'delete', 'options', 'head', 'trace'];
                 foreach ($methods as $m) {
-                    $getter = 'get' . ucfirst($m);
+                    $getter = 'get'.ucfirst($m);
                     if (method_exists($pathItem, $getter)) {
                         $operation = $pathItem->{$getter}();
                         if ($operation && method_exists($operation, 'getTags')) {
@@ -116,7 +113,7 @@ class DocsController extends Controller
                     $filteredTags[] = $tag;
                 }
             }
-            if (!empty($filteredTags) && method_exists($openApi, 'withTags')) {
+            if (! empty($filteredTags) && method_exists($openApi, 'withTags')) {
                 $openApi = $openApi->withTags($filteredTags);
             }
         }
@@ -125,7 +122,7 @@ class DocsController extends Controller
             $schemas = $openApi->getComponents()->getSchemas();
 
             if ($schemas instanceof \ArrayObject) {
-                $filteredSchemas = new \ArrayObject();
+                $filteredSchemas = new \ArrayObject;
                 foreach ($schemas as $schemaName => $schema) {
                     if (isset($usedSchemaNames[$schemaName])) {
                         $filteredSchemas[$schemaName] = $schema;
@@ -133,7 +130,7 @@ class DocsController extends Controller
                 }
             }
 
-            if (!empty((array) $filteredSchemas) && method_exists($openApi, 'withComponents') && method_exists($openApi->getComponents(), 'withSchemas')) {
+            if (! empty((array) $filteredSchemas) && method_exists($openApi, 'withComponents') && method_exists($openApi->getComponents(), 'withSchemas')) {
                 $openApi = $openApi->getComponents()->withSchemas($filteredSchemas);
             }
         }

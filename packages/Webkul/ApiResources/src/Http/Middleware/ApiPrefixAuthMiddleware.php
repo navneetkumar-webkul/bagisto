@@ -3,8 +3,8 @@
 namespace Webkul\ApiResources\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
 use Illuminate\Auth\Middleware\Authenticate as AuthenticateMiddleware;
+use Illuminate\Http\Request;
 
 /**
  * Middleware that dispatches authentication based on API prefix.

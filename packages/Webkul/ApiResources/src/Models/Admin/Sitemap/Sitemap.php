@@ -9,6 +9,4 @@ use ApiPlatform\Metadata\ApiResource;
     routePrefix: '/api/v1/admin',
     security: "is_granted('ROLE_ADMIN')"
 )]
-class Sitemap extends \Webkul\Sitemap\Models\Sitemap
-{
-}
+class Sitemap extends \Webkul\Sitemap\Models\Sitemap {}

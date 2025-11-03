@@ -9,6 +9,4 @@ use ApiPlatform\Metadata\ApiResource;
     routePrefix: '/api/v1/admin',
     security: "is_granted('ROLE_ADMIN')"
 )]
-class DownloadableLinkPurchased extends \Webkul\Sales\Models\DownloadableLinkPurchased
-{
-}
+class DownloadableLinkPurchased extends \Webkul\Sales\Models\DownloadableLinkPurchased {}

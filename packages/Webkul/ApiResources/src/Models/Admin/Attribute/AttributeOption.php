@@ -17,5 +17,4 @@ class AttributeOption extends \Webkul\Attribute\Models\AttributeOption
     {
         return $this->translations;
     }
-
 }

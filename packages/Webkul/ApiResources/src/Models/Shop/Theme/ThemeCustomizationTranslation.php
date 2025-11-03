@@ -12,6 +12,4 @@ use ApiPlatform\Metadata\ApiResource;
         new \ApiPlatform\Metadata\GetCollection(openapi: new \ApiPlatform\OpenApi\Model\Operation(null, ['Shop - Theme'], null, 'Theme Customization Translation for the Shop (collection)', 'Retrieve a collection of theme customization translation settings used by the shop UI.')),
     ],
 )]
-class ThemeCustomizationTranslation extends \Webkul\Theme\Models\ThemeCustomizationTranslation
-{
-}
+class ThemeCustomizationTranslation extends \Webkul\Theme\Models\ThemeCustomizationTranslation {}

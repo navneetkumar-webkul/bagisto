@@ -2,7 +2,6 @@
 
 namespace Webkul\ApiResources\Http\Middleware;
 
-use Closure;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful as Middleware;
 
 class CustomEnsureFrontendRequestsAreStateful extends Middleware

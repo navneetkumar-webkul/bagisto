@@ -10,6 +10,4 @@ use ApiPlatform\Metadata\ApiResource;
     routePrefix: '/api/v1/admin',
     security: "is_granted('ROLE_ADMIN')"
 )]
-class URLRewrite extends \Webkul\Marketing\Models\URLRewrite
-{
-}
+class URLRewrite extends \Webkul\Marketing\Models\URLRewrite {}

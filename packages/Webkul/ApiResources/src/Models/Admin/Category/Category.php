@@ -2,8 +2,8 @@
 
 namespace Webkul\ApiResources\Models\Admin\Category;
 
-use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
 
 #[ApiResource(
     description: 'Category  resource',

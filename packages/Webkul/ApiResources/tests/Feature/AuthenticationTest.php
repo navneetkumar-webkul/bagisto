@@ -3,7 +3,6 @@
 namespace Webkul\ApiResources\Tests\Feature;
 
 use Webkul\ApiResources\Tests\ApiResourcesTestCase;
-use Webkul\User\Models\Admin as AdminModel;
 
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
@@ -17,14 +16,14 @@ describe('Authentication API Endpoints', function () {
         test('should successfully login with valid credentials', function () {
             // Arrange
             $admin = $this->createTestAdmin([
-                'email' => 'admin_' . uniqid() . '@example.com',
+                'email'    => 'admin_'.uniqid().'@example.com',
                 'password' => \Illuminate\Support\Facades\Hash::make('password123'),
             ]);
 
             // Act
             $response = postJson('/api/v1/admin/login', [
-                'email' => $admin->email,
-                'password' => 'password123',
+                'email'       => $admin->email,
+                'password'    => 'password123',
                 'device_name' => 'test-device',
             ]);
 
@@ -48,14 +47,14 @@ describe('Authentication API Endpoints', function () {
         test('should fail login with invalid credentials', function () {
             // Arrange
             $this->createTestAdmin([
-                'email' => 'admin_' . uniqid() . '@example.com',
+                'email'    => 'admin_'.uniqid().'@example.com',
                 'password' => \Illuminate\Support\Facades\Hash::make('password123'),
             ]);
 
             // Act
             $response = postJson('/api/v1/admin/login', [
-                'email' => 'admin_' . uniqid() . '@example.com',
-                'password' => 'wrongpassword',
+                'email'       => 'admin_'.uniqid().'@example.com',
+                'password'    => 'wrongpassword',
                 'device_name' => 'test-device',
             ]);
 
@@ -67,8 +66,8 @@ describe('Authentication API Endpoints', function () {
         test('should fail login with non-existent email', function () {
             // Act
             $response = postJson('/api/v1/admin/login', [
-                'email' => 'nonexistent@example.com',
-                'password' => 'password123',
+                'email'       => 'nonexistent@example.com',
+                'password'    => 'password123',
                 'device_name' => 'test-device',
             ]);
 
@@ -89,8 +88,8 @@ describe('Authentication API Endpoints', function () {
         test('should validate email format during login', function () {
             // Act & Assert
             postJson('/api/v1/admin/login', [
-                'email' => 'invalid-email',
-                'password' => 'password123',
+                'email'       => 'invalid-email',
+                'password'    => 'password123',
                 'device_name' => 'test-device',
             ])
                 ->assertStatus(422)
@@ -103,8 +102,8 @@ describe('Authentication API Endpoints', function () {
 
             // Act
             $response = postJson('/api/v1/admin/login', [
-                'email' => $admin->email,
-                'password' => 'password',
+                'email'       => $admin->email,
+                'password'    => 'password',
                 'device_name' => 'test-device',
             ]);
 
@@ -124,7 +123,7 @@ describe('Authentication API Endpoints', function () {
         test('should send password reset link with valid email', function () {
             // Arrange
             $admin = $this->createTestAdmin([
-                'email' => 'admin_' . uniqid() . '@example.com',
+                'email' => 'admin_'.uniqid().'@example.com',
             ]);
 
             // Act
@@ -173,10 +172,10 @@ describe('Authentication API Endpoints', function () {
         test('should handle multiple password reset requests', function () {
             // Arrange
             $admin1 = $this->createTestAdmin([
-                'email' => 'reset_' . uniqid() . '@example.com',
+                'email' => 'reset_'.uniqid().'@example.com',
             ]);
             $admin2 = $this->createTestAdmin([
-                'email' => 'reset_' . uniqid() . '@example.com',
+                'email' => 'reset_'.uniqid().'@example.com',
             ]);
 
             // Act - Request reset for admin1
@@ -258,7 +257,7 @@ describe('Authentication API Endpoints', function () {
             // Act
             $response = getJson('/api/v1/admin/get', [
                 'Authorization' => 'Bearer invalid-token-12345',
-                'Accept' => 'application/json',
+                'Accept'        => 'application/json',
             ]);
 
             // Assert
@@ -271,8 +270,8 @@ describe('Authentication API Endpoints', function () {
 
             // Login
             $loginResponse = postJson('/api/v1/admin/login', [
-                'email' => $admin->email,
-                'password' => 'password',
+                'email'       => $admin->email,
+                'password'    => 'password',
                 'device_name' => 'test-device',
             ]);
             $token = $loginResponse->json('token');
@@ -342,7 +341,7 @@ describe('Authentication API Endpoints', function () {
             // Act
             $response = postJson('/api/v1/admin/logout', [], [
                 'Authorization' => 'Bearer invalid-token',
-                'Accept' => 'application/json',
+                'Accept'        => 'application/json',
             ]);
 
             // Assert
@@ -423,7 +422,7 @@ describe('Authentication API Endpoints', function () {
 
             // Act
             $response = postJson('/api/v1/admin/update', [
-                'password' => 'newpassword123',
+                'password'              => 'newpassword123',
                 'password_confirmation' => 'newpassword123',
             ], $this->getAuthHeaders($token));
 
@@ -445,7 +444,7 @@ describe('Authentication API Endpoints', function () {
 
             // Act
             $response = postJson('/api/v1/admin/update', [
-                'name' => $newName,
+                'name'  => $newName,
                 'email' => $newEmail,
             ], $this->getAuthHeaders($token));
 
@@ -477,7 +476,7 @@ describe('Authentication API Endpoints', function () {
 
             // Act
             $response = postJson('/api/v1/admin/update', [
-                'password' => 'newpassword123',
+                'password'              => 'newpassword123',
                 'password_confirmation' => 'differentpassword',
             ], $this->getAuthHeaders($token));
 
@@ -493,7 +492,7 @@ describe('Authentication API Endpoints', function () {
 
             // Act
             $response = postJson('/api/v1/admin/update', [
-                'password' => 'short',
+                'password'              => 'short',
                 'password_confirmation' => 'short',
             ], $this->getAuthHeaders($token));
 
@@ -535,7 +534,7 @@ describe('Authentication API Endpoints', function () {
                 'name' => 'New Name',
             ], [
                 'Authorization' => 'Bearer invalid-token',
-                'Accept' => 'application/json',
+                'Accept'        => 'application/json',
             ]);
 
             // Assert
@@ -604,8 +603,8 @@ describe('Authentication API Endpoints', function () {
 
             // Act - Login
             $loginResponse = postJson('/api/v1/admin/login', [
-                'email' => $admin->email,
-                'password' => 'password',
+                'email'       => $admin->email,
+                'password'    => 'password',
                 'device_name' => 'test-device',
             ]);
 
@@ -640,7 +639,7 @@ describe('Authentication API Endpoints', function () {
 
             // Act - Update profile
             $updateResponse = postJson('/api/v1/admin/update', [
-                'name' => 'Updated Name',
+                'name'  => 'Updated Name',
                 'email' => 'updated@example.com',
             ], $this->getAuthHeaders($token));
 

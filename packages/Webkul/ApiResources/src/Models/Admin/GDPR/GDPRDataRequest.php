@@ -10,6 +10,4 @@ use ApiPlatform\Metadata\ApiResource;
     routePrefix: '/api/v1/admin',
     security: "is_granted('ROLE_ADMIN')"
 )]
-class GDPRDataRequest extends \Webkul\GDPR\Models\GDPRDataRequest
-{
-}
+class GDPRDataRequest extends \Webkul\GDPR\Models\GDPRDataRequest {}

@@ -10,6 +10,4 @@ use ApiPlatform\Metadata\ApiResource;
     routePrefix: '/api/v1/admin',
     security: "is_granted('ROLE_ADMIN')"
 )]
-class AttributeFamily extends \Webkul\Attribute\Models\AttributeFamily
-{
-}
+class AttributeFamily extends \Webkul\Attribute\Models\AttributeFamily {}

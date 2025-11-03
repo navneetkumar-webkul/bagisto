@@ -9,11 +9,8 @@ use ApiPlatform\Metadata\GetCollection;
 #[ApiResource(
     routePrefix: '/api/v1/admin',
     operations: [
-        new GetCollection(),
-        new Get(),
+        new GetCollection,
+        new Get,
     ]
 )]
-class CountryState extends \Webkul\Core\Models\CountryState
-{
-
-}
+class CountryState extends \Webkul\Core\Models\CountryState {}

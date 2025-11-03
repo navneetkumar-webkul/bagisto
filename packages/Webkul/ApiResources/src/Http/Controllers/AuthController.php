@@ -13,27 +13,29 @@ class AuthController extends BaseController
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
+            'email'       => 'required|email',
+            'password'    => 'required',
             'device_name' => 'required',
         ]);
 
-        if (!Auth::guard('admin')->attempt([
-            'email' => $credentials['email'],
+        if (! Auth::guard('admin')->attempt([
+            'email'    => $credentials['email'],
             'password' => $credentials['password'],
         ])) {
-            return response()->json(['error' => 'Invalid credentials'], 401);
+            return response()->json([
+                'error' => trans('api-resources.auth.login.invalid_credentials'),
+            ], 401);
         }
 
         $user = Auth::guard('admin')->user();
         $token = $user->createToken($credentials['device_name'])->plainTextToken;
 
         return response()->json([
-            'message' => 'Logged in successfully',
-            'token' => $token,
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
+            'message' => trans('api-resources.auth.login.success'),
+            'token'   => $token,
+            'user'    => [
+                'id'    => $user->id,
+                'name'  => $user->name,
                 'email' => $user->email,
             ],
         ]);
@@ -43,13 +45,14 @@ class AuthController extends BaseController
     {
         $request->user('sanctum')->currentAccessToken()->delete();
 
-        return response()->json(['message' => 'Logged out successfully']);
+        return response()->json([
+            'message' => trans('api-resources.auth.logout.success'),
+        ]);
     }
 
     /**
      * Get logged in admin user's details
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function get(Request $request)
@@ -57,13 +60,13 @@ class AuthController extends BaseController
         $admin = $request->user('sanctum');
 
         return response()->json([
-            'message' => 'Admin details retrieved successfully',
-            'data' => [
-                'id' => $admin->id,
-                'name' => $admin->name,
-                'email' => $admin->email,
-                'status' => $admin->status,
-                'image' => $admin->image,
+            'message' => trans('api-resources.auth.get.success'),
+            'data'    => [
+                'id'        => $admin->id,
+                'name'      => $admin->name,
+                'email'     => $admin->email,
+                'status'    => $admin->status,
+                'image'     => $admin->image,
                 'image_url' => $admin->image_url,
             ],
         ]);
@@ -72,7 +75,6 @@ class AuthController extends BaseController
     /**
      * Update admin user's profile
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request)
@@ -80,8 +82,8 @@ class AuthController extends BaseController
         $admin = $request->user('sanctum');
 
         $validated = $request->validate([
-            'name' => 'sometimes|required|string|max:255',
-            'email' => 'sometimes|required|email|unique:admins,email,' . $admin->id,
+            'name'     => 'sometimes|required|string|max:255',
+            'email'    => 'sometimes|required|email|unique:admins,email,'.$admin->id,
             'password' => 'sometimes|required|string|min:8|confirmed',
         ]);
 
@@ -101,13 +103,13 @@ class AuthController extends BaseController
         $admin->save();
 
         return response()->json([
-            'message' => 'Admin profile updated successfully',
-            'data' => [
-                'id' => $admin->id,
-                'name' => $admin->name,
-                'email' => $admin->email,
-                'status' => $admin->status,
-                'image' => $admin->image,
+            'message' => trans('api-resources.auth.update.success'),
+            'data'    => [
+                'id'        => $admin->id,
+                'name'      => $admin->name,
+                'email'     => $admin->email,
+                'status'    => $admin->status,
+                'image'     => $admin->image,
                 'image_url' => $admin->image_url,
             ],
         ]);
@@ -116,7 +118,6 @@ class AuthController extends BaseController
     /**
      * Send password reset link
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function forgotPassword(Request $request)
@@ -134,23 +135,24 @@ class AuthController extends BaseController
             // Check if password reset was sent successfully
             if ($status == Password::RESET_LINK_SENT) {
                 return response()->json([
-                    'message' => 'Password reset link has been sent to your email',
-                    'status' => 'success',
+                    'message' => trans('api-resources.auth.forgot_password.link_sent'),
+                    'status'  => 'success',
                 ], 200);
             } elseif ($status == Password::INVALID_USER) {
                 return response()->json([
-                    'error' => 'User not found',
+                    'error' => trans('api-resources.auth.forgot_password.user_not_found'),
                 ], 404);
             } else {
                 return response()->json([
-                    'error' => 'Unable to send password reset link',
+                    'error'       => trans('api-resources.auth.forgot_password.failed'),
                     'status_code' => $status,
                 ], 400);
             }
         } catch (\Exception $e) {
-            \Log::error('Password reset error: ' . $e->getMessage());
+            \Log::error('Password reset error: '.$e->getMessage());
+
             return response()->json([
-                'error' => 'Unable to send password reset link. Please try again later.',
+                'error'   => trans('api-resources.auth.forgot_password.try_again'),
                 'details' => env('APP_DEBUG') ? $e->getMessage() : null,
             ], 500);
         }

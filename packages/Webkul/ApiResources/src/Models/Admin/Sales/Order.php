@@ -9,14 +9,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Webkul\ApiResources\Models\Admin\Core\Channel;
-use Webkul\ApiResources\Models\Admin\Sales\OrderItem;
-use Webkul\ApiResources\Models\Admin\Sales\Invoice;
-use Webkul\ApiResources\Models\Admin\Sales\Shipment;
-use Webkul\ApiResources\Models\Admin\Sales\OrderAddress;
-use Webkul\ApiResources\Models\Admin\Sales\OrderComment;
-use Webkul\ApiResources\Models\Admin\Sales\OrderPayment;
-use Webkul\ApiResources\Models\Admin\Sales\OrderTransaction;
-use Webkul\ApiResources\Models\Admin\Sales\Refund;
 
 #[ApiResource(
     description: 'Order  resource',
@@ -35,9 +27,10 @@ class Order extends \Webkul\Sales\Models\Order
      */
     public function getItemsAttribute()
     {
-        if (!$this->relationLoaded('items')) {
+        if (! $this->relationLoaded('items')) {
             $this->load('items');
         }
+
         return $this->relations['items'] ?? [];
     }
 
@@ -46,9 +39,10 @@ class Order extends \Webkul\Sales\Models\Order
      */
     public function getInvoicesAttribute()
     {
-        if (!$this->relationLoaded('invoices')) {
+        if (! $this->relationLoaded('invoices')) {
             $this->load('invoices');
         }
+
         return $this->relations['invoices'] ?? [];
     }
 
@@ -57,9 +51,10 @@ class Order extends \Webkul\Sales\Models\Order
      */
     public function getShipmentsAttribute()
     {
-        if (!$this->relationLoaded('shipments')) {
+        if (! $this->relationLoaded('shipments')) {
             $this->load('shipments');
         }
+
         return $this->relations['shipments'] ?? [];
     }
 
@@ -68,9 +63,10 @@ class Order extends \Webkul\Sales\Models\Order
      */
     public function getAddressesAttribute()
     {
-        if (!$this->relationLoaded('addresses')) {
+        if (! $this->relationLoaded('addresses')) {
             $this->load('addresses');
         }
+
         return $this->relations['addresses'] ?? [];
     }
 
@@ -181,6 +177,4 @@ class Order extends \Webkul\Sales\Models\Order
     {
         return $this->morphTo();
     }
-
 }
-

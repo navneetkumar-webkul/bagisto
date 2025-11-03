@@ -6,7 +6,5 @@ use ApiPlatform\Metadata\ApiResource;
 
 #[ApiResource(
     routePrefix: '/api/v1/admin',
-    )]
-class ProductGroupedProduct extends \Webkul\Product\Models\ProductGroupedProduct
-{
-}
+)]
+class ProductGroupedProduct extends \Webkul\Product\Models\ProductGroupedProduct {}

@@ -2,11 +2,11 @@
 
 namespace Webkul\ApiResources\Models\Admin\Attribute;
 
-use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use GraphQL\Error\UserError;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use GraphQL\Error\UserError;
 use Webkul\ApiResources\Http\Requests\AttributeFormRequest;
 
 #[ApiResource(

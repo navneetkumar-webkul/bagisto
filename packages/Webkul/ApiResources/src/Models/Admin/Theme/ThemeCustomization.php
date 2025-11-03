@@ -9,6 +9,4 @@ use ApiPlatform\Metadata\ApiResource;
     routePrefix: '/api/v1/admin',
     security: "is_granted('ROLE_ADMIN')"
 )]
-class ThemeCustomization extends \Webkul\Theme\Models\ThemeCustomization
-{
-}
+class ThemeCustomization extends \Webkul\Theme\Models\ThemeCustomization {}

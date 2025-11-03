@@ -189,7 +189,7 @@ describe('Attribute API', function () {
             $token = $admin->createToken('test-device')->plainTextToken;
             $attribute = Attribute::factory()->create([
                 'admin_name' => 'Detail Test Attribute',
-                'type' => 'text',
+                'type'       => 'text',
             ]);
 
             // Act
@@ -225,12 +225,12 @@ describe('Attribute API', function () {
             // Arrange
             $admin = Admin::factory()->create();
             $token = $admin->createToken('test-device')->plainTextToken;
-            $code = chr(rand(97, 122)) . chr(rand(97, 122));
+            $code = chr(rand(97, 122)).chr(rand(97, 122));
             $data = [
-                'code' => $code,
-                'admin_name' => 'New Created Attribute',
-                'type' => 'text',
-                'position' => 10,
+                'code'        => $code,
+                'admin_name'  => 'New Created Attribute',
+                'type'        => 'text',
+                'position'    => 10,
                 'is_required' => 0,
             ];
 
@@ -250,9 +250,9 @@ describe('Attribute API', function () {
         test('should return 401 without authentication token', function () {
             // Arrange
             $data = [
-                'code' => 'cd',
+                'code'       => 'cd',
                 'admin_name' => 'Test',
-                'type' => 'text',
+                'type'       => 'text',
             ];
 
             // Act
@@ -289,9 +289,9 @@ describe('Attribute API', function () {
 
             // Act
             $response = postJson('/api/v1/attributes', [
-                'code' => $existing->code,
+                'code'       => $existing->code,
                 'admin_name' => 'Duplicate Code',
-                'type' => 'text',
+                'type'       => 'text',
             ], [
                 'Authorization' => "Bearer {$token}",
             ]);
@@ -311,9 +311,9 @@ describe('Attribute API', function () {
             // Act & Assert
             foreach ($types as $i => $type) {
                 $response = postJson('/api/v1/attributes', [
-                    'code' => $codes[$i],
-                    'admin_name' => 'Type ' . $type,
-                    'type' => $type,
+                    'code'       => $codes[$i],
+                    'admin_name' => 'Type '.$type,
+                    'type'       => $type,
                 ], [
                     'Authorization' => "Bearer {$token}",
                 ]);
@@ -330,9 +330,9 @@ describe('Attribute API', function () {
 
             // Act
             $response = postJson('/api/v1/attributes', [
-                'code' => 'bt',
+                'code'       => 'bt',
                 'admin_name' => 'Invalid Type',
-                'type' => 'invalid_type_xyz',
+                'type'       => 'invalid_type_xyz',
             ], [
                 'Authorization' => "Bearer {$token}",
             ]);
@@ -348,10 +348,10 @@ describe('Attribute API', function () {
 
             // Act
             $response = postJson('/api/v1/attributes', [
-                'code' => 'op',
-                'admin_name' => 'With Optionals',
-                'type' => 'text',
-                'position' => 25,
+                'code'        => 'op',
+                'admin_name'  => 'With Optionals',
+                'type'        => 'text',
+                'position'    => 25,
                 'is_required' => 1,
             ], [
                 'Authorization' => "Bearer {$token}",
@@ -375,7 +375,7 @@ describe('Attribute API', function () {
             // Act
             $response = patchJson("/api/v1/attributes/{$attribute->id}", [
                 'admin_name' => 'Updated Attribute Name',
-                'position' => 20,
+                'position'   => 20,
             ], [
                 'Authorization' => "Bearer {$token}",
             ]);
@@ -386,7 +386,7 @@ describe('Attribute API', function () {
                 ->assertJsonPath('data.position', 20);
 
             $this->assertDatabaseHas('attributes', [
-                'id' => $attribute->id,
+                'id'         => $attribute->id,
                 'admin_name' => 'Updated Attribute Name',
             ]);
         });
@@ -466,8 +466,8 @@ describe('Attribute API', function () {
 
             // Act
             $response = patchJson("/api/v1/attributes/{$attribute->id}", [
-                'admin_name' => 'Multi Updated',
-                'position' => 50,
+                'admin_name'  => 'Multi Updated',
+                'position'    => 50,
                 'is_required' => 1,
             ], [
                 'Authorization' => "Bearer {$token}",
@@ -601,13 +601,13 @@ describe('Attribute API', function () {
             $admin = Admin::factory()->create();
             $token = $admin->createToken('test-device')->plainTextToken;
             $headers = ['Authorization' => "Bearer {$token}"];
-            $code = chr(rand(97, 122)) . chr(rand(97, 122));
+            $code = chr(rand(97, 122)).chr(rand(97, 122));
 
             // 1. CREATE
             $createResponse = postJson('/api/v1/attributes', [
-                'code' => $code,
+                'code'       => $code,
                 'admin_name' => 'CRUD Test Attribute',
-                'type' => 'text',
+                'type'       => 'text',
             ], $headers);
 
             $createResponse->assertStatus(201);
@@ -622,7 +622,7 @@ describe('Attribute API', function () {
             // 3. UPDATE
             $updateResponse = patchJson("/api/v1/attributes/{$attrId}", [
                 'admin_name' => 'CRUD Updated',
-                'position' => 15,
+                'position'   => 15,
             ], $headers);
 
             $updateResponse->assertStatus(200)
@@ -644,13 +644,13 @@ describe('Attribute API', function () {
             $admin2 = Admin::factory()->create();
             $token1 = $admin1->createToken('device1')->plainTextToken;
             $token2 = $admin2->createToken('device2')->plainTextToken;
-            $code = chr(rand(97, 122)) . chr(rand(97, 122));
+            $code = chr(rand(97, 122)).chr(rand(97, 122));
 
             // Act & Assert - Admin 1 creates
             $createResp = postJson('/api/v1/attributes', [
-                'code' => $code,
+                'code'       => $code,
                 'admin_name' => 'Multi Admin Test',
-                'type' => 'select',
+                'type'       => 'select',
             ], ['Authorization' => "Bearer {$token1}"]);
 
             $createResp->assertStatus(201);
@@ -685,15 +685,15 @@ describe('Attribute API', function () {
 
             // Create a few attributes with unique codes
             postJson('/api/v1/attributes', [
-                'code' => 'f' . chr(rand(97, 122)),
+                'code'       => 'f'.chr(rand(97, 122)),
                 'admin_name' => 'Filter Test 1',
-                'type' => 'text',
+                'type'       => 'text',
             ], $headers)->assertStatus(201);
 
             postJson('/api/v1/attributes', [
-                'code' => 'g' . chr(rand(97, 122)),
+                'code'       => 'g'.chr(rand(97, 122)),
                 'admin_name' => 'Filter Test 2',
-                'type' => 'select',
+                'type'       => 'select',
             ], $headers)->assertStatus(201);
 
             // Act - Get collection

@@ -11,7 +11,7 @@ final class AuthProcessor implements ProcessorInterface
 {
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
-        if (!$data instanceof Authentication) {
+        if (! $data instanceof Authentication) {
             throw new \InvalidArgumentException('Expected Authentication object');
         }
 
@@ -19,12 +19,12 @@ final class AuthProcessor implements ProcessorInterface
         $password = $data->password;
         $deviceName = $data->deviceName ?? 'api';
 
-        if (!$email || !$password) {
+        if (! $email || ! $password) {
             throw new \Exception('Email and password are required', 400);
         }
 
-        if (!Auth::guard('admin')->attempt([
-            'email' => $email,
+        if (! Auth::guard('admin')->attempt([
+            'email'    => $email,
             'password' => $password,
         ])) {
             throw new \Exception('Invalid credentials', 401);

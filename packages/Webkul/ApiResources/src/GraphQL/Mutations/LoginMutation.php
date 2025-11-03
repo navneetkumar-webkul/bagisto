@@ -3,25 +3,24 @@
 namespace Webkul\ApiResources\GraphQL\Mutations;
 
 use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Mutation;
 use Illuminate\Support\Facades\Auth;
-use Webkul\User\Models\Admin;
+use Rebing\GraphQL\Support\Mutation;
 
 class LoginMutation extends Mutation
 {
     protected $attributes = [
-        'name' => 'Login',
+        'name'        => 'Login',
         'description' => 'Login with email and password',
     ];
 
     public function type(): Type
     {
         return $this->builder()->objectType([
-            'token' => ['type' => Type::string()],
+            'token'   => ['type' => Type::string()],
             'message' => ['type' => Type::string()],
-            'user' => ['type' => $this->builder()->objectType([
-                'id' => ['type' => Type::int()],
-                'name' => ['type' => Type::string()],
+            'user'    => ['type' => $this->builder()->objectType([
+                'id'    => ['type' => Type::int()],
+                'name'  => ['type' => Type::string()],
                 'email' => ['type' => Type::string()],
             ])],
         ]);
@@ -47,8 +46,8 @@ class LoginMutation extends Mutation
 
     public function resolve($root, $args)
     {
-        if (!Auth::guard('admin')->attempt([
-            'email' => $args['email'],
+        if (! Auth::guard('admin')->attempt([
+            'email'    => $args['email'],
             'password' => $args['password'],
         ])) {
             throw new \Exception('Invalid credentials', 401);
@@ -59,10 +58,10 @@ class LoginMutation extends Mutation
 
         return [
             'message' => 'Logged in successfully',
-            'token' => $token,
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
+            'token'   => $token,
+            'user'    => [
+                'id'    => $user->id,
+                'name'  => $user->name,
                 'email' => $user->email,
             ],
         ];

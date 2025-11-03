@@ -9,7 +9,4 @@ use ApiPlatform\Metadata\ApiResource;
     routePrefix: '/api/v1/admin',
     security: "is_granted('ROLE_ADMIN')"
 )]
-class AttributeOptionTranslation extends \Webkul\Attribute\Models\AttributeOptionTranslation
-{
-
-}
+class AttributeOptionTranslation extends \Webkul\Attribute\Models\AttributeOptionTranslation {}

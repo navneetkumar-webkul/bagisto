@@ -9,6 +9,4 @@ use ApiPlatform\Metadata\ApiResource;
     routePrefix: '/api/v1/admin',
     security: "is_granted('ROLE_ADMIN')"
 )]
-class Page extends \Webkul\CMS\Models\Page
-{
-}
+class Page extends \Webkul\CMS\Models\Page {}

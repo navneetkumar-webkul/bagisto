@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Webkul\Product\Models\ProductProxy;
 use Webkul\Sales\Models\OrderItemProxy;
 
 #[ApiResource(
@@ -54,4 +53,3 @@ class OrderItem extends \Webkul\Sales\Models\OrderItem
         return $this->belongsTo(OrderItemProxy::modelClass(), 'parent_id');
     }
 }
-
