@@ -13,6 +13,5 @@ class SkipCsrfForApi extends BaseVerifier
      */
     protected $except = [
         'api/*',
-        'api/v1/*',
     ];
 }

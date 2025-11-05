@@ -7,7 +7,7 @@ use ApiPlatform\State\ProcessorInterface;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Webkul\ApiResources\Http\Requests\Admin\CreateChannelRequest;
+use Webkul\ApiResources\Http\Requests\Admin\ChannelFormRequest;
 use Webkul\Core\Repositories\ChannelRepository;
 
 class ChannelProcessor implements ProcessorInterface
@@ -56,7 +56,7 @@ class ChannelProcessor implements ProcessorInterface
         } catch (ValidationException $e) {
             // Return validation errors with 422 Unprocessable Entity status
             return new JsonResponse([
-                '@context'          => '/api/v1/contexts/ConstraintViolationList',
+                '@context'          => '/api/contexts/ConstraintViolationList',
                 '@type'             => 'ConstraintViolationList',
                 'hydra:title'       => 'An error occurred',
                 'hydra:description' => 'Validation failed.',
@@ -86,8 +86,8 @@ class ChannelProcessor implements ProcessorInterface
 
         $validator = $factory->make(
             $data,
-            (new CreateChannelRequest)->rules(),
-            (new CreateChannelRequest)->messages()
+            (new ChannelFormRequest)->rules(),
+            (new ChannelFormRequest)->messages()
         );
 
         if ($validator->fails()) {

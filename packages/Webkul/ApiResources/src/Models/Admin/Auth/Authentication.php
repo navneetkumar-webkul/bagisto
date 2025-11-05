@@ -9,7 +9,7 @@ use Webkul\ApiResources\State\AuthProcessor;
 
 #[ApiResource(
     description: 'Authentication resource',
-    routePrefix: '/api/v1/admin',
+    routePrefix: '/api/admin',
     security: "is_granted('ROLE_ADMIN')",
     operations: [
         new Post(

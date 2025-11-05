@@ -18,7 +18,7 @@ use Webkul\Product\Models\ProductDownloadableSampleProxy;
 
 #[ApiResource(
     description: 'Product resource',
-    routePrefix: '/api/v1/admin',
+    routePrefix: '/api/admin',
     security: "is_granted('ROLE_ADMIN')"
 )]
 class Product extends \Webkul\Product\Models\Product

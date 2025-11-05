@@ -21,7 +21,7 @@ packages/Webkul/ApiResources/tests/
 
 The test suite covers the following 5 authentication API endpoints:
 
-### 1. POST `/api/v1/admin/login` - Admin Login
+### 1. POST `/api/admin/login` - Admin Login
 - **Description**: Authenticate admin user and get auth token
 - **Tests Covered**:
   - ✅ Successful login with valid credentials
@@ -31,7 +31,7 @@ The test suite covers the following 5 authentication API endpoints:
   - ✅ Email format validation
   - ✅ Token structure validation
 
-### 2. POST `/api/v1/admin/forgot-password` - Admin Forgot Password
+### 2. POST `/api/admin/forgot-password` - Admin Forgot Password
 - **Description**: Send password reset link to admin email
 - **Tests Covered**:
   - ✅ Send password reset link with valid email
@@ -40,7 +40,7 @@ The test suite covers the following 5 authentication API endpoints:
   - ✅ Email field is required
   - ✅ Handle multiple password reset requests
 
-### 3. GET `/api/v1/admin/get` - Get Logged In Admin User Details
+### 3. GET `/api/admin/get` - Get Logged In Admin User Details
 - **Description**: Retrieve authenticated admin user details
 - **Tests Covered**:
   - ✅ Return logged in admin details when authenticated
@@ -49,7 +49,7 @@ The test suite covers the following 5 authentication API endpoints:
   - ✅ Fail with invalid token
   - ✅ Return current authenticated admin only
 
-### 4. POST `/api/v1/admin/logout` - Admin Logout
+### 4. POST `/api/admin/logout` - Admin Logout
 - **Description**: Logout authenticated admin and invalidate token
 - **Tests Covered**:
   - ✅ Successfully logout when authenticated
@@ -58,7 +58,7 @@ The test suite covers the following 5 authentication API endpoints:
   - ✅ Fail logout with invalid token
   - ⏭️ Handle multiple logout requests (skipped - depends on Sanctum config)
 
-### 5. POST `/api/v1/admin/update` - Admin Update Profile
+### 5. POST `/api/admin/update` - Admin Update Profile
 - **Description**: Update authenticated admin user profile
 - **Tests Covered**:
   - ✅ Successfully update admin name
@@ -141,7 +141,7 @@ Generate authorization headers for authenticated requests.
 
 ```php
 $headers = $this->getAuthHeaders($token);
-$response = $this->getJson('/api/v1/admin/get', $headers);
+$response = $this->getJson('/api/admin/get', $headers);
 ```
 
 ### `getAdminCredentials()`

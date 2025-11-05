@@ -77,7 +77,7 @@ return [
         'introspection'        => ['enabled' => true],
         'max_query_complexity' => 500,
         'max_query_depth'      => 200,
-        'route_prefix'         => '/api/v1/graphql',
+        'route_prefix'         => '/api/graphql',
         'middleware'           => [
             \Webkul\ApiResources\Http\Middleware\GraphQLAuthMiddleware::class.':sanctum',
         ],
@@ -97,7 +97,7 @@ return [
                 'name'        => 'Authorization',
                 'type'        => 'header',
                 'in'          => 'header',
-                'description' => 'Send "Bearer {token}" — Sanctum personal access token',
+                'description' => 'Send "Bearer {token}" - Sanctum personal access token',
             ],
         ],
         'http_auth' => [

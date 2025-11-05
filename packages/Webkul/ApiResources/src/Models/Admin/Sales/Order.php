@@ -12,7 +12,7 @@ use Webkul\ApiResources\Models\Admin\Core\Channel;
 
 #[ApiResource(
     description: 'Order  resource',
-    routePrefix: '/api/v1/admin',
+    routePrefix: '/api/admin',
     security: "is_granted('ROLE_ADMIN')"
 )]
 class Order extends \Webkul\Sales\Models\Order

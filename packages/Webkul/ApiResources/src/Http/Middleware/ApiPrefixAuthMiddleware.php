@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 
 /**
  * Middleware that dispatches authentication based on API prefix.
- * - /api/v1/admin/* -> enforces 'sanctum' guard
- * - /api/v1/shop/*  -> currently left public (no guard)
+ * - /api/admin/* -> enforces 'sanctum' guard
+ * - /api/shop/*  -> currently left public (no guard)
  *
  * Adjust guards or prefixes as needed for your project.
  */
@@ -17,13 +17,13 @@ class ApiPrefixAuthMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if ($request->is('api/v1/admin*') || $request->is('api/v1/admin')) {
+        if ($request->is('api/admin*') || $request->is('api/admin')) {
             $authMiddleware = app(AuthenticateMiddleware::class);
 
             return $authMiddleware->handle($request, $next, 'sanctum');
         }
 
-        if ($request->is('api/v1/shop*') || $request->is('api/v1/shop')) {
+        if ($request->is('api/shop*') || $request->is('api/shop')) {
 
             return $next($request);
         }

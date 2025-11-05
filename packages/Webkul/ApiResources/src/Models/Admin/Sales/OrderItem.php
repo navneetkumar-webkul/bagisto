@@ -12,7 +12,7 @@ use Webkul\Sales\Models\OrderItemProxy;
 
 #[ApiResource(
     description: 'Order Item  resource',
-    routePrefix: '/api/v1/admin',
+    routePrefix: '/api/admin',
     security: "is_granted('ROLE_ADMIN')"
 )]
 class OrderItem extends \Webkul\Sales\Models\OrderItem

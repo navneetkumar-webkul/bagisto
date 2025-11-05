@@ -75,12 +75,12 @@ class ApiResourcesServiceProvider extends ServiceProvider
     protected function registerApiRoutes(): void
     {
         // Admin authentication routes
-        Route::group(['prefix' => 'api/v1/admin', 'middleware' => ['api']], function () {
+        Route::group(['prefix' => 'api/admin', 'middleware' => ['api']], function () {
             $this->loadRoutesFrom(__DIR__.'/../routes/admin_auth.php');
         });
 
         // Shop (Customer) authentication routes
-        Route::group(['prefix' => 'api/v1/shop/auth', 'middleware' => ['api']], function () {
+        Route::group(['prefix' => 'api/shop/auth', 'middleware' => ['api']], function () {
             $this->loadRoutesFrom(__DIR__.'/../routes/shop_auth.php');
         });
     }

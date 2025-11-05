@@ -13,8 +13,9 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         'api/*',
-        'api/v1/*',
-        'api/v1/admin/*',
-        'api/v1/graphql/*',
+        'api/admin/*',
+        'api/shop/*',
+        'api/graphql/*',
     ];
 }
+

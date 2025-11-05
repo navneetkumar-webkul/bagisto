@@ -9,7 +9,7 @@ use ApiPlatform\Metadata\GetCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[ApiResource(
-    routePrefix: '/api/v1/admin',
+    routePrefix: '/api/admin',
     operations: [
         new GetCollection,
         new Get,

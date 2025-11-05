@@ -12,7 +12,7 @@ class CustomEnsureFrontendRequestsAreStateful extends Middleware
     public function handle($request, $next)
     {
         // Skip stateful CSRF checks for API routes
-        if ($request->is('api/*', 'api/v1/*')) {
+        if ($request->is('api/*', 'api/*')) {
             return $next($request);
         }
 

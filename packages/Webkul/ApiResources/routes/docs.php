@@ -4,11 +4,11 @@ use Illuminate\Support\Facades\Route;
 use Webkul\ApiResources\Http\Controllers\DocsController;
 
 // Shop docs (accept with and without trailing slash)
-Route::get('/api/v1/shop', [DocsController::class, 'ui'])->defaults('area', '/api/v1/shop');
-Route::get('/api/v1/shop/', [DocsController::class, 'ui'])->defaults('area', '/api/v1/shop');
-Route::get('/api/v1/shop/openapi.json', [DocsController::class, 'json'])->defaults('area', '/api/v1/shop');
+Route::get('/api/shop', [DocsController::class, 'ui'])->defaults('area', '/api/shop');
+Route::get('/api/shop/', [DocsController::class, 'ui'])->defaults('area', '/api/shop');
+Route::get('/api/shop/openapi.json', [DocsController::class, 'json'])->defaults('area', '/api/shop');
 
 // Admin docs (accept with and without trailing slash)
-Route::get('/api/v1/admin', [DocsController::class, 'ui'])->defaults('area', '/api/v1/admin');
-Route::get('/api/v1/admin/', [DocsController::class, 'ui'])->defaults('area', '/api/v1/admin');
-Route::get('/api/v1/admin/openapi.json', [DocsController::class, 'json'])->defaults('area', '/api/v1/admin');
+Route::get('/api/admin', [DocsController::class, 'ui'])->defaults('area', '/api/admin');
+Route::get('/api/admin/', [DocsController::class, 'ui'])->defaults('area', '/api/admin');
+Route::get('/api/admin/openapi.json', [DocsController::class, 'json'])->defaults('area', '/api/admin');

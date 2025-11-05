@@ -13,7 +13,7 @@ use Webkul\ApiResources\Http\Requests\AttributeFormRequest;
     shortName: 'Attribute',
     description: 'Product attribute resource',
     rules: AttributeFormRequest::class,
-    routePrefix: '/api/v1/admin',
+    routePrefix: '/api/admin',
     security: "is_granted('ROLE_ADMIN')"
 )]
 class Attribute extends \Webkul\Attribute\Models\Attribute

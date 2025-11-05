@@ -8,14 +8,16 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Webkul\ApiResources\Http\Requests\Admin\ChannelFormRequest;
 use Webkul\ApiResources\Models\Admin\Category\Category;
 use Webkul\ApiResources\Models\Admin\Inventory\InventorySource;
 use Webkul\ApiResources\State\Admin\ChannelProcessor;
 
 #[ApiResource(
     description: 'Channel resource',
-    routePrefix: '/api/v1/admin',
+    routePrefix: '/api/admin',
     security: "is_granted('ROLE_ADMIN')",
+    rules: ChannelFormRequest::class,
     operations: [
         new Post(
             processor: ChannelProcessor::class,
@@ -61,13 +63,13 @@ use Webkul\ApiResources\State\Admin\ChannelProcessor;
                                             'type'   => 'string',
                                             'format' => 'iri-reference',
                                         ],
-                                        'example'     => ['/api/v1/admin/locales/1'],
+                                        'example'     => ['/api/admin/locales/1'],
                                         'description' => 'Array of IRI references to locales',
                                     ],
                                     'default_locale_id' => [
                                         'type'        => 'string',
                                         'format'      => 'iri-reference',
-                                        'example'     => '/api/v1/admin/locales/1',
+                                        'example'     => '/api/admin/locales/1',
                                         'description' => 'IRI reference to default locale',
                                     ],
                                     'currencies' => [
@@ -76,13 +78,13 @@ use Webkul\ApiResources\State\Admin\ChannelProcessor;
                                             'type'   => 'string',
                                             'format' => 'iri-reference',
                                         ],
-                                        'example'     => ['/api/v1/admin/currencies/1'],
+                                        'example'     => ['/api/admin/currencies/1'],
                                         'description' => 'Array of IRI references to currencies',
                                     ],
                                     'base_currency_id' => [
                                         'type'        => 'string',
                                         'format'      => 'iri-reference',
-                                        'example'     => '/api/v1/admin/currencies/1',
+                                        'example'     => '/api/admin/currencies/1',
                                         'description' => 'IRI reference to base currency',
                                     ],
                                     'inventory_sources' => [
@@ -91,7 +93,7 @@ use Webkul\ApiResources\State\Admin\ChannelProcessor;
                                             'type'   => 'string',
                                             'format' => 'iri-reference',
                                         ],
-                                        'example'     => ['/api/v1/admin/inventory_sources/1'],
+                                        'example'     => ['/api/admin/inventory_sources/1'],
                                         'description' => 'Array of IRI references to inventory sources',
                                     ],
                                     'theme' => [
@@ -247,7 +249,7 @@ class Channel extends \Webkul\Core\Models\Channel
                 continue;
             }
 
-            // Handle IRI strings like "api/v1/locales/1" or "/api/v1/locales/1"
+            // Handle IRI strings like "api/locales/1" or "/api/locales/1"
             if (is_string($item)) {
                 $normalized = trim($item, '/');
                 $parts = explode('/', $normalized);

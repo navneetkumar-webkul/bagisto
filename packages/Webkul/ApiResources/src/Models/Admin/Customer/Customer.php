@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[ApiResource(
     description: 'Customer  resource',
-    routePrefix: '/api/v1/admin',
+    routePrefix: '/api/admin',
     security: "is_granted('ROLE_ADMIN')"
 )]
 class Customer extends \Webkul\Customer\Models\Customer

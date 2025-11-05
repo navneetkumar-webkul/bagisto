@@ -15,11 +15,11 @@ use function Pest\Laravel\postJson;
  * Attribute API Test Suite
  *
  * Comprehensive tests for Attribute Resource API endpoints:
- * - GET /api/v1/attributes - Retrieve collection with pagination/filtering
- * - GET /api/v1/attributes/{id} - Retrieve single attribute
- * - POST /api/v1/attributes - Create new attribute
- * - PATCH /api/v1/attributes/{id} - Update attribute
- * - DELETE /api/v1/attributes/{id} - Delete attribute
+ * - GET /api/attributes - Retrieve collection with pagination/filtering
+ * - GET /api/attributes/{id} - Retrieve single attribute
+ * - POST /api/attributes - Create new attribute
+ * - PATCH /api/attributes/{id} - Update attribute
+ * - DELETE /api/attributes/{id} - Delete attribute
  *
  * All tests use authenticated API calls with Bearer token authentication.
  * Follows Laravel 11 & Pest standards, Bagisto conventions.
@@ -27,9 +27,9 @@ use function Pest\Laravel\postJson;
  */
 describe('Attribute API', function () {
     /**
-     * GET /api/v1/attributes - Collection retrieval with authentication
+     * GET /api/attributes - Collection retrieval with authentication
      */
-    describe('Get Attributes Collection (GET /api/v1/attributes)', function () {
+    describe('Get Attributes Collection (GET /api/attributes)', function () {
         test('should retrieve collection of attributes with valid auth token', function () {
             // Arrange
             $admin = Admin::factory()->create();
@@ -37,7 +37,7 @@ describe('Attribute API', function () {
             Attribute::factory()->count(2)->create();
 
             // Act
-            $response = getJson('/api/v1/attributes', [
+            $response = getJson('/api/attributes', [
                 'Authorization' => "Bearer {$token}",
             ]);
 
@@ -59,7 +59,7 @@ describe('Attribute API', function () {
 
         test('should return 401 without authentication token', function () {
             // Act
-            $response = getJson('/api/v1/attributes');
+            $response = getJson('/api/attributes');
 
             // Assert
             $response->assertStatus(401)
@@ -68,7 +68,7 @@ describe('Attribute API', function () {
 
         test('should return 401 with invalid token', function () {
             // Act
-            $response = getJson('/api/v1/attributes', [
+            $response = getJson('/api/attributes', [
                 'Authorization' => 'Bearer invalid_token_12345',
             ]);
 
@@ -83,7 +83,7 @@ describe('Attribute API', function () {
             Attribute::factory()->count(5)->create();
 
             // Act
-            $response = getJson('/api/v1/attributes?per_page=3', [
+            $response = getJson('/api/attributes?per_page=3', [
                 'Authorization' => "Bearer {$token}",
             ]);
 
@@ -101,7 +101,7 @@ describe('Attribute API', function () {
             Attribute::factory()->count(10)->create();
 
             // Act
-            $response = getJson('/api/v1/attributes?page=1&per_page=5', [
+            $response = getJson('/api/attributes?page=1&per_page=5', [
                 'Authorization' => "Bearer {$token}",
             ]);
 
@@ -116,7 +116,7 @@ describe('Attribute API', function () {
             Attribute::factory()->create();
 
             // Act
-            $response = getJson('/api/v1/attributes?per_page=1', [
+            $response = getJson('/api/attributes?per_page=1', [
                 'Authorization' => "Bearer {$token}",
             ]);
 
@@ -130,9 +130,9 @@ describe('Attribute API', function () {
     });
 
     /**
-     * GET /api/v1/attributes/{id} - Single resource retrieval with authentication
+     * GET /api/attributes/{id} - Single resource retrieval with authentication
      */
-    describe('Get Single Attribute (GET /api/v1/attributes/{id})', function () {
+    describe('Get Single Attribute (GET /api/attributes/{id})', function () {
         test('should retrieve single attribute by id with valid token', function () {
             // Arrange
             $admin = Admin::factory()->create();
@@ -140,7 +140,7 @@ describe('Attribute API', function () {
             $attribute = Attribute::factory()->create();
 
             // Act
-            $response = getJson("/api/v1/attributes/{$attribute->id}", [
+            $response = getJson("/api/attributes/{$attribute->id}", [
                 'Authorization' => "Bearer {$token}",
             ]);
 
@@ -163,7 +163,7 @@ describe('Attribute API', function () {
             $attribute = Attribute::factory()->create();
 
             // Act
-            $response = getJson("/api/v1/attributes/{$attribute->id}");
+            $response = getJson("/api/attributes/{$attribute->id}");
 
             // Assert
             $response->assertStatus(401);
@@ -175,7 +175,7 @@ describe('Attribute API', function () {
             $token = $admin->createToken('test-device')->plainTextToken;
 
             // Act
-            $response = getJson('/api/v1/attributes/99999', [
+            $response = getJson('/api/attributes/99999', [
                 'Authorization' => "Bearer {$token}",
             ]);
 
@@ -193,7 +193,7 @@ describe('Attribute API', function () {
             ]);
 
             // Act
-            $response = getJson("/api/v1/attributes/{$attribute->id}", [
+            $response = getJson("/api/attributes/{$attribute->id}", [
                 'Authorization' => "Bearer {$token}",
             ]);
 
@@ -208,7 +208,7 @@ describe('Attribute API', function () {
             $attribute = Attribute::factory()->create();
 
             // Act
-            $response = getJson("/api/v1/attributes/{$attribute->id}", [
+            $response = getJson("/api/attributes/{$attribute->id}", [
                 'Authorization' => 'Bearer invalid_token',
             ]);
 
@@ -218,9 +218,9 @@ describe('Attribute API', function () {
     });
 
     /**
-     * POST /api/v1/attributes - Resource creation with authentication
+     * POST /api/attributes - Resource creation with authentication
      */
-    describe('Create Attribute (POST /api/v1/attributes)', function () {
+    describe('Create Attribute (POST /api/attributes)', function () {
         test('should create new attribute with valid data and auth token', function () {
             // Arrange
             $admin = Admin::factory()->create();
@@ -235,7 +235,7 @@ describe('Attribute API', function () {
             ];
 
             // Act
-            $response = postJson('/api/v1/attributes', $data, [
+            $response = postJson('/api/attributes', $data, [
                 'Authorization' => "Bearer {$token}",
             ]);
 
@@ -256,7 +256,7 @@ describe('Attribute API', function () {
             ];
 
             // Act
-            $response = postJson('/api/v1/attributes', $data);
+            $response = postJson('/api/attributes', $data);
 
             // Assert
             $response->assertStatus(401);
@@ -272,7 +272,7 @@ describe('Attribute API', function () {
             ];
 
             // Act
-            $response = postJson('/api/v1/attributes', $data, [
+            $response = postJson('/api/attributes', $data, [
                 'Authorization' => "Bearer {$token}",
             ]);
 
@@ -288,7 +288,7 @@ describe('Attribute API', function () {
             $existing = Attribute::factory()->create();
 
             // Act
-            $response = postJson('/api/v1/attributes', [
+            $response = postJson('/api/attributes', [
                 'code'       => $existing->code,
                 'admin_name' => 'Duplicate Code',
                 'type'       => 'text',
@@ -310,7 +310,7 @@ describe('Attribute API', function () {
 
             // Act & Assert
             foreach ($types as $i => $type) {
-                $response = postJson('/api/v1/attributes', [
+                $response = postJson('/api/attributes', [
                     'code'       => $codes[$i],
                     'admin_name' => 'Type '.$type,
                     'type'       => $type,
@@ -329,7 +329,7 @@ describe('Attribute API', function () {
             $token = $admin->createToken('test-device')->plainTextToken;
 
             // Act
-            $response = postJson('/api/v1/attributes', [
+            $response = postJson('/api/attributes', [
                 'code'       => 'bt',
                 'admin_name' => 'Invalid Type',
                 'type'       => 'invalid_type_xyz',
@@ -347,7 +347,7 @@ describe('Attribute API', function () {
             $token = $admin->createToken('test-device')->plainTextToken;
 
             // Act
-            $response = postJson('/api/v1/attributes', [
+            $response = postJson('/api/attributes', [
                 'code'        => 'op',
                 'admin_name'  => 'With Optionals',
                 'type'        => 'text',
@@ -363,9 +363,9 @@ describe('Attribute API', function () {
     });
 
     /**
-     * PATCH /api/v1/attributes/{id} - Resource update with authentication
+     * PATCH /api/attributes/{id} - Resource update with authentication
      */
-    describe('Update Attribute (PATCH /api/v1/attributes/{id})', function () {
+    describe('Update Attribute (PATCH /api/attributes/{id})', function () {
         test('should update attribute with valid data and auth token', function () {
             // Arrange
             $admin = Admin::factory()->create();
@@ -373,7 +373,7 @@ describe('Attribute API', function () {
             $attribute = Attribute::factory()->create();
 
             // Act
-            $response = patchJson("/api/v1/attributes/{$attribute->id}", [
+            $response = patchJson("/api/attributes/{$attribute->id}", [
                 'admin_name' => 'Updated Attribute Name',
                 'position'   => 20,
             ], [
@@ -396,7 +396,7 @@ describe('Attribute API', function () {
             $attribute = Attribute::factory()->create();
 
             // Act
-            $response = patchJson("/api/v1/attributes/{$attribute->id}", [
+            $response = patchJson("/api/attributes/{$attribute->id}", [
                 'admin_name' => 'Updated',
             ]);
 
@@ -410,7 +410,7 @@ describe('Attribute API', function () {
             $token = $admin->createToken('test-device')->plainTextToken;
 
             // Act
-            $response = patchJson('/api/v1/attributes/99999', [
+            $response = patchJson('/api/attributes/99999', [
                 'admin_name' => 'Some Name',
             ], [
                 'Authorization' => "Bearer {$token}",
@@ -428,7 +428,7 @@ describe('Attribute API', function () {
             $originalCode = $attribute->code;
 
             // Act
-            $response = patchJson("/api/v1/attributes/{$attribute->id}", [
+            $response = patchJson("/api/attributes/{$attribute->id}", [
                 'position' => 99,
             ], [
                 'Authorization' => "Bearer {$token}",
@@ -447,7 +447,7 @@ describe('Attribute API', function () {
             $attribute = Attribute::factory()->create(['type' => 'text']);
 
             // Act
-            $response = patchJson("/api/v1/attributes/{$attribute->id}", [
+            $response = patchJson("/api/attributes/{$attribute->id}", [
                 'type' => 'textarea',
             ], [
                 'Authorization' => "Bearer {$token}",
@@ -465,7 +465,7 @@ describe('Attribute API', function () {
             $attribute = Attribute::factory()->create();
 
             // Act
-            $response = patchJson("/api/v1/attributes/{$attribute->id}", [
+            $response = patchJson("/api/attributes/{$attribute->id}", [
                 'admin_name'  => 'Multi Updated',
                 'position'    => 50,
                 'is_required' => 1,
@@ -488,19 +488,19 @@ describe('Attribute API', function () {
             $originalCode = $attribute->code;
 
             // Act - Multiple updates
-            patchJson("/api/v1/attributes/{$attribute->id}", [
+            patchJson("/api/attributes/{$attribute->id}", [
                 'admin_name' => 'Update 1',
             ], [
                 'Authorization' => "Bearer {$token}",
             ]);
 
-            patchJson("/api/v1/attributes/{$attribute->id}", [
+            patchJson("/api/attributes/{$attribute->id}", [
                 'position' => 25,
             ], [
                 'Authorization' => "Bearer {$token}",
             ]);
 
-            $response = patchJson("/api/v1/attributes/{$attribute->id}", [
+            $response = patchJson("/api/attributes/{$attribute->id}", [
                 'is_required' => 1,
             ], [
                 'Authorization' => "Bearer {$token}",
@@ -516,9 +516,9 @@ describe('Attribute API', function () {
     });
 
     /**
-     * DELETE /api/v1/attributes/{id} - Resource deletion with authentication
+     * DELETE /api/attributes/{id} - Resource deletion with authentication
      */
-    describe('Delete Attribute (DELETE /api/v1/attributes/{id})', function () {
+    describe('Delete Attribute (DELETE /api/attributes/{id})', function () {
         test('should delete attribute with valid auth token', function () {
             // Arrange
             $admin = Admin::factory()->create();
@@ -527,7 +527,7 @@ describe('Attribute API', function () {
             $attrId = $attribute->id;
 
             // Act
-            $response = deleteJson("/api/v1/attributes/{$attrId}", [], [
+            $response = deleteJson("/api/attributes/{$attrId}", [], [
                 'Authorization' => "Bearer {$token}",
             ]);
 
@@ -541,7 +541,7 @@ describe('Attribute API', function () {
             $attribute = Attribute::factory()->create();
 
             // Act
-            $response = deleteJson("/api/v1/attributes/{$attribute->id}");
+            $response = deleteJson("/api/attributes/{$attribute->id}");
 
             // Assert
             $response->assertStatus(401);
@@ -553,7 +553,7 @@ describe('Attribute API', function () {
             $token = $admin->createToken('test-device')->plainTextToken;
 
             // Act
-            $response = deleteJson('/api/v1/attributes/99999', [], [
+            $response = deleteJson('/api/attributes/99999', [], [
                 'Authorization' => "Bearer {$token}",
             ]);
 
@@ -569,7 +569,7 @@ describe('Attribute API', function () {
             $attr2 = Attribute::factory()->create();
 
             // Act
-            deleteJson("/api/v1/attributes/{$attr1->id}", [], [
+            deleteJson("/api/attributes/{$attr1->id}", [], [
                 'Authorization' => "Bearer {$token}",
             ]);
 
@@ -583,7 +583,7 @@ describe('Attribute API', function () {
             $attribute = Attribute::factory()->create();
 
             // Act
-            $response = deleteJson("/api/v1/attributes/{$attribute->id}", [], [
+            $response = deleteJson("/api/attributes/{$attribute->id}", [], [
                 'Authorization' => 'Bearer invalid_token',
             ]);
 
@@ -604,7 +604,7 @@ describe('Attribute API', function () {
             $code = chr(rand(97, 122)).chr(rand(97, 122));
 
             // 1. CREATE
-            $createResponse = postJson('/api/v1/attributes', [
+            $createResponse = postJson('/api/attributes', [
                 'code'       => $code,
                 'admin_name' => 'CRUD Test Attribute',
                 'type'       => 'text',
@@ -615,12 +615,12 @@ describe('Attribute API', function () {
             expect($attrId)->toBeTruthy();
 
             // 2. READ
-            $readResponse = getJson("/api/v1/attributes/{$attrId}", $headers);
+            $readResponse = getJson("/api/attributes/{$attrId}", $headers);
             $readResponse->assertStatus(200)
                 ->assertJsonPath('data.code', $code);
 
             // 3. UPDATE
-            $updateResponse = patchJson("/api/v1/attributes/{$attrId}", [
+            $updateResponse = patchJson("/api/attributes/{$attrId}", [
                 'admin_name' => 'CRUD Updated',
                 'position'   => 15,
             ], $headers);
@@ -630,11 +630,11 @@ describe('Attribute API', function () {
                 ->assertJsonPath('data.position', 15);
 
             // 4. DELETE
-            $deleteResponse = deleteJson("/api/v1/attributes/{$attrId}", [], $headers);
+            $deleteResponse = deleteJson("/api/attributes/{$attrId}", [], $headers);
             $deleteResponse->assertStatus(204);
 
             // Verify deletion
-            $verifyResponse = getJson("/api/v1/attributes/{$attrId}", $headers);
+            $verifyResponse = getJson("/api/attributes/{$attrId}", $headers);
             $verifyResponse->assertStatus(404);
         });
 
@@ -647,7 +647,7 @@ describe('Attribute API', function () {
             $code = chr(rand(97, 122)).chr(rand(97, 122));
 
             // Act & Assert - Admin 1 creates
-            $createResp = postJson('/api/v1/attributes', [
+            $createResp = postJson('/api/attributes', [
                 'code'       => $code,
                 'admin_name' => 'Multi Admin Test',
                 'type'       => 'select',
@@ -657,20 +657,20 @@ describe('Attribute API', function () {
             $attrId = $createResp->json('data.id');
 
             // Admin 2 can read
-            $readResp = getJson("/api/v1/attributes/{$attrId}", [
+            $readResp = getJson("/api/attributes/{$attrId}", [
                 'Authorization' => "Bearer {$token2}",
             ]);
             $readResp->assertStatus(200);
 
             // Admin 2 can update
-            $updateResp = patchJson("/api/v1/attributes/{$attrId}", [
+            $updateResp = patchJson("/api/attributes/{$attrId}", [
                 'position' => 30,
             ], ['Authorization' => "Bearer {$token2}"]);
 
             $updateResp->assertStatus(200);
 
             // Admin 1 can delete
-            $deleteResp = deleteJson("/api/v1/attributes/{$attrId}", [], [
+            $deleteResp = deleteJson("/api/attributes/{$attrId}", [], [
                 'Authorization' => "Bearer {$token1}",
             ]);
 
@@ -684,20 +684,20 @@ describe('Attribute API', function () {
             $headers = ['Authorization' => "Bearer {$token}"];
 
             // Create a few attributes with unique codes
-            postJson('/api/v1/attributes', [
+            postJson('/api/attributes', [
                 'code'       => 'f'.chr(rand(97, 122)),
                 'admin_name' => 'Filter Test 1',
                 'type'       => 'text',
             ], $headers)->assertStatus(201);
 
-            postJson('/api/v1/attributes', [
+            postJson('/api/attributes', [
                 'code'       => 'g'.chr(rand(97, 122)),
                 'admin_name' => 'Filter Test 2',
                 'type'       => 'select',
             ], $headers)->assertStatus(201);
 
             // Act - Get collection
-            $response = getJson('/api/v1/attributes?per_page=50', $headers);
+            $response = getJson('/api/attributes?per_page=50', $headers);
 
             // Assert
             $response->assertStatus(200);

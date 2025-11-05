@@ -10,7 +10,7 @@ use function Pest\Laravel\postJson;
 describe('Authentication API Endpoints', function () {
     /**
      * Test admin login endpoint
-     * POST /api/v1/admin/login
+     * POST /api/admin/login
      */
     describe('Admin Login', function () {
         test('should successfully login with valid credentials', function () {
@@ -21,7 +21,7 @@ describe('Authentication API Endpoints', function () {
             ]);
 
             // Act
-            $response = postJson('/api/v1/admin/login', [
+            $response = postJson('/api/admin/login', [
                 'email'       => $admin->email,
                 'password'    => 'password123',
                 'device_name' => 'test-device',
@@ -52,7 +52,7 @@ describe('Authentication API Endpoints', function () {
             ]);
 
             // Act
-            $response = postJson('/api/v1/admin/login', [
+            $response = postJson('/api/admin/login', [
                 'email'       => 'admin_'.uniqid().'@example.com',
                 'password'    => 'wrongpassword',
                 'device_name' => 'test-device',
@@ -65,7 +65,7 @@ describe('Authentication API Endpoints', function () {
 
         test('should fail login with non-existent email', function () {
             // Act
-            $response = postJson('/api/v1/admin/login', [
+            $response = postJson('/api/admin/login', [
                 'email'       => 'nonexistent@example.com',
                 'password'    => 'password123',
                 'device_name' => 'test-device',
@@ -78,7 +78,7 @@ describe('Authentication API Endpoints', function () {
 
         test('should validate required fields during login', function () {
             // Act & Assert
-            postJson('/api/v1/admin/login', [])
+            postJson('/api/admin/login', [])
                 ->assertStatus(422)
                 ->assertJsonValidationErrorFor('email')
                 ->assertJsonValidationErrorFor('password')
@@ -87,7 +87,7 @@ describe('Authentication API Endpoints', function () {
 
         test('should validate email format during login', function () {
             // Act & Assert
-            postJson('/api/v1/admin/login', [
+            postJson('/api/admin/login', [
                 'email'       => 'invalid-email',
                 'password'    => 'password123',
                 'device_name' => 'test-device',
@@ -101,7 +101,7 @@ describe('Authentication API Endpoints', function () {
             $admin = $this->createTestAdmin();
 
             // Act
-            $response = postJson('/api/v1/admin/login', [
+            $response = postJson('/api/admin/login', [
                 'email'       => $admin->email,
                 'password'    => 'password',
                 'device_name' => 'test-device',
@@ -117,7 +117,7 @@ describe('Authentication API Endpoints', function () {
 
     /**
      * Test admin forgot password endpoint
-     * POST /api/v1/admin/forgot-password
+     * POST /api/admin/forgot-password
      */
     describe('Admin Forgot Password', function () {
         test('should send password reset link with valid email', function () {
@@ -127,7 +127,7 @@ describe('Authentication API Endpoints', function () {
             ]);
 
             // Act
-            $response = postJson('/api/v1/admin/forgot-password', [
+            $response = postJson('/api/admin/forgot-password', [
                 'email' => $admin->email,
             ]);
 
@@ -144,7 +144,7 @@ describe('Authentication API Endpoints', function () {
 
         test('should fail password reset with non-existent email', function () {
             // Act
-            $response = postJson('/api/v1/admin/forgot-password', [
+            $response = postJson('/api/admin/forgot-password', [
                 'email' => 'nonexistent@example.com',
             ]);
 
@@ -155,7 +155,7 @@ describe('Authentication API Endpoints', function () {
 
         test('should validate email format in forgot password', function () {
             // Act & Assert
-            postJson('/api/v1/admin/forgot-password', [
+            postJson('/api/admin/forgot-password', [
                 'email' => 'invalid-email',
             ])
                 ->assertStatus(422)
@@ -164,7 +164,7 @@ describe('Authentication API Endpoints', function () {
 
         test('should validate email is required in forgot password', function () {
             // Act & Assert
-            postJson('/api/v1/admin/forgot-password', [])
+            postJson('/api/admin/forgot-password', [])
                 ->assertStatus(422)
                 ->assertJsonValidationErrorFor('email');
         });
@@ -179,12 +179,12 @@ describe('Authentication API Endpoints', function () {
             ]);
 
             // Act - Request reset for admin1
-            $response1 = postJson('/api/v1/admin/forgot-password', [
+            $response1 = postJson('/api/admin/forgot-password', [
                 'email' => $admin1->email,
             ]);
 
             // Request reset for admin2
-            $response2 = postJson('/api/v1/admin/forgot-password', [
+            $response2 = postJson('/api/admin/forgot-password', [
                 'email' => $admin2->email,
             ]);
 
@@ -196,7 +196,7 @@ describe('Authentication API Endpoints', function () {
 
     /**
      * Test get logged in admin user details endpoint
-     * GET /api/v1/admin/get
+     * GET /api/admin/get
      */
     describe('Get Logged In Admin User Details', function () {
         test('should return logged in admin details when authenticated', function () {
@@ -206,7 +206,7 @@ describe('Authentication API Endpoints', function () {
             $token = $auth['token'];
 
             // Act
-            $response = getJson('/api/v1/admin/get', $this->getAuthHeaders($token));
+            $response = getJson('/api/admin/get', $this->getAuthHeaders($token));
 
             // Assert
             $response->assertStatus(200)
@@ -232,7 +232,7 @@ describe('Authentication API Endpoints', function () {
             $token = $auth['token'];
 
             // Act
-            $response = getJson('/api/v1/admin/get', $this->getAuthHeaders($token));
+            $response = getJson('/api/admin/get', $this->getAuthHeaders($token));
 
             // Assert
             $response->assertStatus(200);
@@ -246,7 +246,7 @@ describe('Authentication API Endpoints', function () {
 
         test('should fail without authentication token', function () {
             // Act
-            $response = getJson('/api/v1/admin/get');
+            $response = getJson('/api/admin/get');
 
             // Assert
             $response->assertStatus(401)
@@ -255,7 +255,7 @@ describe('Authentication API Endpoints', function () {
 
         test('should fail with invalid token', function () {
             // Act
-            $response = getJson('/api/v1/admin/get', [
+            $response = getJson('/api/admin/get', [
                 'Authorization' => 'Bearer invalid-token-12345',
                 'Accept'        => 'application/json',
             ]);
@@ -269,7 +269,7 @@ describe('Authentication API Endpoints', function () {
             $admin = $this->createTestAdmin();
 
             // Login
-            $loginResponse = postJson('/api/v1/admin/login', [
+            $loginResponse = postJson('/api/admin/login', [
                 'email'       => $admin->email,
                 'password'    => 'password',
                 'device_name' => 'test-device',
@@ -277,7 +277,7 @@ describe('Authentication API Endpoints', function () {
             $token = $loginResponse->json('token');
 
             // Act - Get details for this admin
-            $response = getJson('/api/v1/admin/get', $this->getAuthHeaders($token));
+            $response = getJson('/api/admin/get', $this->getAuthHeaders($token));
 
             // Assert - The response should return the authenticated admin's details
             $response->assertStatus(200)
@@ -292,7 +292,7 @@ describe('Authentication API Endpoints', function () {
 
     /**
      * Test admin logout endpoint
-     * POST /api/v1/admin/logout
+     * POST /api/admin/logout
      */
     describe('Admin Logout', function () {
         test('should successfully logout when authenticated', function () {
@@ -301,7 +301,7 @@ describe('Authentication API Endpoints', function () {
             $token = $auth['token'];
 
             // Act
-            $response = postJson('/api/v1/admin/logout', [], $this->getAuthHeaders($token));
+            $response = postJson('/api/admin/logout', [], $this->getAuthHeaders($token));
 
             // Assert
             $response->assertStatus(200)
@@ -314,13 +314,13 @@ describe('Authentication API Endpoints', function () {
             $token = $auth['token'];
 
             // Act - First verify token works
-            $beforeLogout = getJson('/api/v1/admin/get', $this->getAuthHeaders($token));
+            $beforeLogout = getJson('/api/admin/get', $this->getAuthHeaders($token));
 
             // Logout
-            postJson('/api/v1/admin/logout', [], $this->getAuthHeaders($token));
+            postJson('/api/admin/logout', [], $this->getAuthHeaders($token));
 
             // Attempt to use the same token after logout
-            $response = getJson('/api/v1/admin/get', $this->getAuthHeaders($token));
+            $response = getJson('/api/admin/get', $this->getAuthHeaders($token));
 
             // Assert
             $beforeLogout->assertStatus(200);
@@ -330,7 +330,7 @@ describe('Authentication API Endpoints', function () {
 
         test('should fail logout without authentication', function () {
             // Act
-            $response = postJson('/api/v1/admin/logout', []);
+            $response = postJson('/api/admin/logout', []);
 
             // Assert
             $response->assertStatus(401)
@@ -339,7 +339,7 @@ describe('Authentication API Endpoints', function () {
 
         test('should fail logout with invalid token', function () {
             // Act
-            $response = postJson('/api/v1/admin/logout', [], [
+            $response = postJson('/api/admin/logout', [], [
                 'Authorization' => 'Bearer invalid-token',
                 'Accept'        => 'application/json',
             ]);
@@ -354,10 +354,10 @@ describe('Authentication API Endpoints', function () {
             $token = $auth['token'];
 
             // Act - First logout
-            $response1 = postJson('/api/v1/admin/logout', [], $this->getAuthHeaders($token));
+            $response1 = postJson('/api/admin/logout', [], $this->getAuthHeaders($token));
 
             // Attempt second logout with same token
-            $response2 = postJson('/api/v1/admin/logout', [], $this->getAuthHeaders($token));
+            $response2 = postJson('/api/admin/logout', [], $this->getAuthHeaders($token));
 
             // Assert
             $response1->assertStatus(200);
@@ -368,7 +368,7 @@ describe('Authentication API Endpoints', function () {
 
     /**
      * Test update admin user profile endpoint
-     * POST /api/v1/admin/update
+     * POST /api/admin/update
      */
     describe('Admin Update Profile', function () {
         test('should successfully update admin name', function () {
@@ -378,7 +378,7 @@ describe('Authentication API Endpoints', function () {
             $newName = 'Updated Admin Name';
 
             // Act
-            $response = postJson('/api/v1/admin/update', [
+            $response = postJson('/api/admin/update', [
                 'name' => $newName,
             ], $this->getAuthHeaders($token));
 
@@ -405,7 +405,7 @@ describe('Authentication API Endpoints', function () {
             $newEmail = 'newemail@example.com';
 
             // Act
-            $response = postJson('/api/v1/admin/update', [
+            $response = postJson('/api/admin/update', [
                 'email' => $newEmail,
             ], $this->getAuthHeaders($token));
 
@@ -421,7 +421,7 @@ describe('Authentication API Endpoints', function () {
             $admin = $auth['admin'];
 
             // Act
-            $response = postJson('/api/v1/admin/update', [
+            $response = postJson('/api/admin/update', [
                 'password'              => 'newpassword123',
                 'password_confirmation' => 'newpassword123',
             ], $this->getAuthHeaders($token));
@@ -443,7 +443,7 @@ describe('Authentication API Endpoints', function () {
             $newEmail = 'newemail@example.com';
 
             // Act
-            $response = postJson('/api/v1/admin/update', [
+            $response = postJson('/api/admin/update', [
                 'name'  => $newName,
                 'email' => $newEmail,
             ], $this->getAuthHeaders($token));
@@ -460,7 +460,7 @@ describe('Authentication API Endpoints', function () {
             $token = $auth['token'];
 
             // Act
-            $response = postJson('/api/v1/admin/update', [
+            $response = postJson('/api/admin/update', [
                 'email' => 'invalid-email',
             ], $this->getAuthHeaders($token));
 
@@ -475,7 +475,7 @@ describe('Authentication API Endpoints', function () {
             $token = $auth['token'];
 
             // Act
-            $response = postJson('/api/v1/admin/update', [
+            $response = postJson('/api/admin/update', [
                 'password'              => 'newpassword123',
                 'password_confirmation' => 'differentpassword',
             ], $this->getAuthHeaders($token));
@@ -491,7 +491,7 @@ describe('Authentication API Endpoints', function () {
             $token = $auth['token'];
 
             // Act
-            $response = postJson('/api/v1/admin/update', [
+            $response = postJson('/api/admin/update', [
                 'password'              => 'short',
                 'password_confirmation' => 'short',
             ], $this->getAuthHeaders($token));
@@ -508,7 +508,7 @@ describe('Authentication API Endpoints', function () {
             $token = $auth['token'];
 
             // Act
-            $response = postJson('/api/v1/admin/update', [
+            $response = postJson('/api/admin/update', [
                 'email' => $admin1->email,
             ], $this->getAuthHeaders($token));
 
@@ -519,7 +519,7 @@ describe('Authentication API Endpoints', function () {
 
         test('should fail update without authentication', function () {
             // Act
-            $response = postJson('/api/v1/admin/update', [
+            $response = postJson('/api/admin/update', [
                 'name' => 'New Name',
             ]);
 
@@ -530,7 +530,7 @@ describe('Authentication API Endpoints', function () {
 
         test('should fail update with invalid token', function () {
             // Act
-            $response = postJson('/api/v1/admin/update', [
+            $response = postJson('/api/admin/update', [
                 'name' => 'New Name',
             ], [
                 'Authorization' => 'Bearer invalid-token',
@@ -547,7 +547,7 @@ describe('Authentication API Endpoints', function () {
             $token = $auth['token'];
 
             // Act
-            $response = postJson('/api/v1/admin/update', [
+            $response = postJson('/api/admin/update', [
                 'name' => 12345,
             ], $this->getAuthHeaders($token));
 
@@ -563,7 +563,7 @@ describe('Authentication API Endpoints', function () {
             $longName = str_repeat('a', 300);
 
             // Act
-            $response = postJson('/api/v1/admin/update', [
+            $response = postJson('/api/admin/update', [
                 'name' => $longName,
             ], $this->getAuthHeaders($token));
 
@@ -579,7 +579,7 @@ describe('Authentication API Endpoints', function () {
             $originalEmail = $auth['admin']->email;
 
             // Act
-            $response = postJson('/api/v1/admin/update', [
+            $response = postJson('/api/admin/update', [
                 'name' => 'Only Name Update',
             ], $this->getAuthHeaders($token));
 
@@ -602,7 +602,7 @@ describe('Authentication API Endpoints', function () {
             $admin = $this->createTestAdmin();
 
             // Act - Login
-            $loginResponse = postJson('/api/v1/admin/login', [
+            $loginResponse = postJson('/api/admin/login', [
                 'email'       => $admin->email,
                 'password'    => 'password',
                 'device_name' => 'test-device',
@@ -611,7 +611,7 @@ describe('Authentication API Endpoints', function () {
             $token = $loginResponse->json('token');
 
             // Act - Get admin details
-            $getResponse = getJson('/api/v1/admin/get', $this->getAuthHeaders($token));
+            $getResponse = getJson('/api/admin/get', $this->getAuthHeaders($token));
 
             // Assert Login
             $loginResponse->assertStatus(200);
@@ -621,13 +621,13 @@ describe('Authentication API Endpoints', function () {
                 ->assertJsonPath('data.email', $admin->email);
 
             // Act - Logout
-            $logoutResponse = postJson('/api/v1/admin/logout', [], $this->getAuthHeaders($token));
+            $logoutResponse = postJson('/api/admin/logout', [], $this->getAuthHeaders($token));
 
             // Assert Logout
             $logoutResponse->assertStatus(200);
 
             // Verify token is invalidated (skip if Sanctum doesn't support immediate revocation)
-            // $invalidTokenResponse = getJson('/api/v1/admin/get', $this->getAuthHeaders($token));
+            // $invalidTokenResponse = getJson('/api/admin/get', $this->getAuthHeaders($token));
             // $invalidTokenResponse->assertStatus(401);
         });
 
@@ -638,7 +638,7 @@ describe('Authentication API Endpoints', function () {
             $admin = $auth['admin'];
 
             // Act - Update profile
-            $updateResponse = postJson('/api/v1/admin/update', [
+            $updateResponse = postJson('/api/admin/update', [
                 'name'  => 'Updated Name',
                 'email' => 'updated@example.com',
             ], $this->getAuthHeaders($token));
@@ -649,7 +649,7 @@ describe('Authentication API Endpoints', function () {
                 ->assertJsonPath('data.email', 'updated@example.com');
 
             // Verify changes persist
-            $getResponse = getJson('/api/v1/admin/get', $this->getAuthHeaders($token));
+            $getResponse = getJson('/api/admin/get', $this->getAuthHeaders($token));
             $getResponse->assertJsonPath('data.name', 'Updated Name')
                 ->assertJsonPath('data.email', 'updated@example.com');
 

@@ -9,7 +9,7 @@ use Webkul\Sales\Models\ShipmentItemProxy;
 
 #[ApiResource(
     description: 'Shipment  resource',
-    routePrefix: '/api/v1/admin',
+    routePrefix: '/api/admin',
     security: "is_granted('ROLE_ADMIN')"
 )]
 class Shipment extends \Webkul\Sales\Models\Shipment

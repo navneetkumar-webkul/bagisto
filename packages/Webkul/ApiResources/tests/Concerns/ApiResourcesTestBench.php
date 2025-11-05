@@ -27,7 +27,7 @@ trait ApiResourcesTestBench
     {
         $admin = $admin ?? $this->createTestAdmin();
 
-        $response = $this->postJson('/api/v1/admin/login', [
+        $response = $this->postJson('/api/admin/login', [
             'email'       => $admin->email,
             'password'    => 'password', // Default password from factory
             'device_name' => 'test-device',
