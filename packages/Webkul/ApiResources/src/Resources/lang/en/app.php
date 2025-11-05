@@ -60,4 +60,31 @@ return [
             'hostname_unique' => 'Hostname must be unique.',
         ],
     ],
+    'rest-api' => [
+        'admin' => [
+            'catalog' => [
+                'products' => [
+                    'type'                  => 'Type',
+                    'attribute-family'      => 'Attribute Family',
+                    'sku'                   => 'SKU',
+                    'super-attributes'      => 'Super Attributes',
+                    'error' => [
+                        'type-required'                    => 'The type field is required.',
+                        'type-invalid'                     => 'The selected type is invalid. Please select a valid product type.',
+                        'attribute-family-required'        => 'The attribute family field is required.',
+                        'attribute-family-exists'          => 'The selected attribute family does not exist.',
+                        'sku-required'                     => 'The SKU field is required.',
+                        'sku-unique'                       => 'The SKU must be unique.',
+                        'sku-invalid-format'               => 'The SKU format is invalid. It must contain only alphanumeric characters, hyphens, and underscores.',
+                        'super-attributes-array'           => 'The super attributes must be an array.',
+                        'super-attributes-min'             => 'The super attributes must have at least one item.',
+                        'configurable-error'               => 'Configurable products must have at least one super attribute.',
+                    ],
+                    'create-success' => 'Product created successfully.',
+                    'update-success' => 'Product updated successfully.',
+                    'delete-success' => 'Product deleted successfully.',
+                ]
+            ]
+        ]
+    ]
 ];

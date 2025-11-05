@@ -2,8 +2,8 @@
 
 return [
     'error_formatter' => [\Webkul\ApiResources\GraphQL\ErrorFormatter::class, '__invoke'],
-    'errors_handler' => [\Webkul\ApiResources\GraphQL\ErrorFormatter::class, '__invoke'],
-    'middleware' => [],
+    'errors_handler'  => [\Webkul\ApiResources\GraphQL\ErrorFormatter::class, '__invoke'],
+    'middleware'      => [],
 
     'schemas' => [
         'default' => [
@@ -30,4 +30,3 @@ return [
         'enums_namespace'     => 'Webkul\\ApiResources\\GraphQL\\Enums',
     ],
 ];
-

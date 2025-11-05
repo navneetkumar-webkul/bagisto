@@ -3,6 +3,15 @@
 namespace Webkul\ApiResources\Models\Admin\Product;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\GraphQl\QueryCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\GraphQl\Query;
+use ApiPlatform\Metadata\GraphQl\Mutation;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,6 +21,8 @@ use Webkul\ApiResources\Models\Admin\CatalogRule\CatalogRuleProductPrice;
 use Webkul\ApiResources\Models\Admin\Category\Category;
 use Webkul\ApiResources\Models\Admin\Core\Channel;
 use Webkul\ApiResources\Models\Admin\Inventory\InventorySource;
+use Webkul\ApiResources\State\Admin\ProductProcessor;
+use Webkul\ApiResources\Http\Requests\Admin\ProductFormRequest;
 use Webkul\BookingProduct\Models\BookingProductProxy;
 use Webkul\Product\Models\ProductDownloadableLinkProxy;
 use Webkul\Product\Models\ProductDownloadableSampleProxy;
@@ -19,7 +30,52 @@ use Webkul\Product\Models\ProductDownloadableSampleProxy;
 #[ApiResource(
     description: 'Product resource',
     routePrefix: '/api/admin',
-    security: "is_granted('ROLE_ADMIN')"
+    security: "is_granted('ROLE_ADMIN')",
+    paginationEnabled: true,
+    paginationItemsPerPage: 5,
+    paginationClientItemsPerPage: true,
+    operations: [
+        new Get(
+            security: "is_granted('VIEW_PRODUCT')"
+        ),
+        new GetCollection(
+            security: "is_granted('VIEW_PRODUCT')"
+        ),
+        new Post(
+            security: "is_granted('CREATE_PRODUCT')",
+            processor: ProductProcessor::class
+            
+        ),
+        new Patch(
+            security: "is_granted('EDIT_PRODUCT')"
+        ),
+        new Delete(
+            security: "is_granted('DELETE_PRODUCT')"
+        ),
+    ],
+    graphQlOperations: [
+        new Query(
+            name: 'item_query',
+            security: "is_granted('VIEW_PRODUCT')"
+        ),
+        new QueryCollection(
+            name: 'collection_query',
+            security: "is_granted('VIEW_PRODUCT')"
+        ),
+        new Mutation(
+            name: 'create',
+            security: "is_granted('CREATE_PRODUCT')",
+            processor: ProductProcessor::class
+        ),
+        new Mutation(
+            name: 'update',
+            security: "is_granted('EDIT_PRODUCT')"
+        ),
+        new Mutation(
+            name: 'delete',
+            security: "is_granted('DELETE_PRODUCT')"
+        ),
+    ]
 )]
 class Product extends \Webkul\Product\Models\Product
 {

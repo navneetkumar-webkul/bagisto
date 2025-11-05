@@ -38,9 +38,14 @@ class ApiResourcesServiceProvider extends ServiceProvider
             );
         });
 
+        $this->app->bind(\Webkul\ApiResources\State\Admin\ProductProcessor::class, function ($app) {
+            return new \Webkul\ApiResources\State\Admin\ProductProcessor;
+        });
+
         $this->app->tag([
             \Webkul\ApiResources\State\AuthProcessor::class,
             \Webkul\ApiResources\State\Admin\ChannelProcessor::class,
+            \Webkul\ApiResources\State\Admin\ProductProcessor::class,
         ], \ApiPlatform\State\ProcessorInterface::class);
     }
 

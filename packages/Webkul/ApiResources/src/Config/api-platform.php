@@ -53,9 +53,9 @@ return [
         'pagination_client_partial'         => false,
         'pagination_items_per_page'         => 30,
         'pagination_maximum_items_per_page' => 30,
-        'route_prefix'                      => '/api/v1',
+        'route_prefix'                      => '/api',
         // Use the middleware FQCN directly to avoid alias registration timing issues
-        'middleware' => [\Webkul\ApiResources\Http\Middleware\ApiPrefixAuthMiddleware::class], // auth:sanctum
+        // 'middleware' => [\Webkul\ApiResources\Http\Middleware\ApiPrefixAuthMiddleware::class], // auth:sanctum
     ],
 
     'pagination' => [

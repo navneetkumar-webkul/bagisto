@@ -4,6 +4,13 @@ namespace Webkul\ApiResources\Models\Admin\Core;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\GraphQl\Mutation;
+use ApiPlatform\Metadata\GraphQl\Query;
+use ApiPlatform\Metadata\GraphQl\QueryCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +26,8 @@ use Webkul\ApiResources\State\Admin\ChannelProcessor;
     security: "is_granted('ROLE_ADMIN')",
     rules: ChannelFormRequest::class,
     operations: [
+        new GetCollection(name: 'collection'),
+        new Get(name: 'item'),
         new Post(
             processor: ChannelProcessor::class,
             deserialize: false,
@@ -131,6 +140,12 @@ use Webkul\ApiResources\State\Admin\ChannelProcessor;
                 ),
             ),
         ),
+        new Patch(name: 'update'),
+        new Delete(name: 'delete'),
+    ],
+    graphQlOperations: [
+        new Query(name: 'item_query'),
+        new QueryCollection(name: 'collection_query'),
     ]
 )]
 class Channel extends \Webkul\Core\Models\Channel
