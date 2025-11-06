@@ -68,7 +68,7 @@ return [
                     'attribute-family'      => 'Attribute Family',
                     'sku'                   => 'SKU',
                     'super-attributes'      => 'Super Attributes',
-                    'error' => [
+                    'error'                 => [
                         'type-required'                    => 'The type field is required.',
                         'type-invalid'                     => 'The selected type is invalid. Please select a valid product type.',
                         'attribute-family-required'        => 'The attribute family field is required.',
@@ -83,8 +83,8 @@ return [
                     'create-success' => 'Product created successfully.',
                     'update-success' => 'Product updated successfully.',
                     'delete-success' => 'Product deleted successfully.',
-                ]
-            ]
-        ]
-    ]
+                ],
+            ],
+        ],
+    ],
 ];

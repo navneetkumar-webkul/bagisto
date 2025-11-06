@@ -24,7 +24,7 @@ class ProductFormRequest extends FormRequest
         $productTypes = implode(',', array_keys(config('product_types', [])));
 
         return [
-            'type'                => 'required|in:' . $productTypes,
+            'type'                => 'required|in:'.$productTypes,
             'attribute_family_id' => 'required|exists:attribute_families,id',
             'sku'                 => ['required', 'unique:products,sku', new Slug],
             'super_attributes'    => 'array|min:1',
@@ -84,12 +84,12 @@ class ProductFormRequest extends FormRequest
         // Validate that configurable products have super_attributes
         if (
             ProductType::hasVariants($this->input('type'))
-            && !$this->has('super_attributes')
+            && ! $this->has('super_attributes')
         ) {
             throw new \Illuminate\Validation\ValidationException(
                 \Illuminate\Support\Facades\Validator::make(
                     $this->all(),
-                    ['super_attributes' => 'required'],
+                    ['super_attributes'          => 'required'],
                     ['super_attributes.required' => trans('api-resources.rest-api.admin.catalog.products.error.configurable-error')]
                 )
             );

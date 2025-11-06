@@ -6,15 +6,17 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\GraphQl\Mutation;
+use ApiPlatform\Metadata\GraphQl\Query;
 use ApiPlatform\Metadata\GraphQl\QueryCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\GraphQl\Query;
-use ApiPlatform\Metadata\GraphQl\Mutation;
+use ApiPlatform\OpenApi\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Webkul\ApiResources\Http\Requests\Admin\ProductFormRequest;
 use Webkul\ApiResources\Models\Admin\Attribute\Attribute;
 use Webkul\ApiResources\Models\Admin\Attribute\AttributeFamily;
 use Webkul\ApiResources\Models\Admin\CatalogRule\CatalogRuleProductPrice;
@@ -22,7 +24,6 @@ use Webkul\ApiResources\Models\Admin\Category\Category;
 use Webkul\ApiResources\Models\Admin\Core\Channel;
 use Webkul\ApiResources\Models\Admin\Inventory\InventorySource;
 use Webkul\ApiResources\State\Admin\ProductProcessor;
-use Webkul\ApiResources\Http\Requests\Admin\ProductFormRequest;
 use Webkul\BookingProduct\Models\BookingProductProxy;
 use Webkul\Product\Models\ProductDownloadableLinkProxy;
 use Webkul\Product\Models\ProductDownloadableSampleProxy;
@@ -34,6 +35,10 @@ use Webkul\Product\Models\ProductDownloadableSampleProxy;
     paginationEnabled: true,
     paginationItemsPerPage: 5,
     paginationClientItemsPerPage: true,
+    denormalizationContext: [
+        'groups'           => ['write'],
+        'skip_null_values' => false,
+    ],
     operations: [
         new Get(
             security: "is_granted('VIEW_PRODUCT')"
@@ -43,8 +48,78 @@ use Webkul\Product\Models\ProductDownloadableSampleProxy;
         ),
         new Post(
             security: "is_granted('CREATE_PRODUCT')",
-            processor: ProductProcessor::class
-            
+            processor: ProductProcessor::class,
+            rules: ProductFormRequest::class,
+            openapi: new Model\Operation(
+                summary: 'Store the product',
+                description: 'Product creation endpoint',
+                tags: ['Product'],
+                parameters: [],
+                requestBody: new Model\RequestBody(
+                    description: 'Product creation payload',
+                    required: true,
+                    content: new \ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                'type'       => 'object',
+                                'properties' => [
+                                    'type' => [
+                                        'type'    => 'string',
+                                        'example' => 'simple',
+                                    ],
+                                    'attribute_family_id' => [
+                                        'type'    => 'integer',
+                                        'example' => 1,
+                                    ],
+                                    'sku' => [
+                                        'type'    => 'string',
+                                        'example' => 'furniture',
+                                    ],
+                                    'super_attributes' => [
+                                        'type'    => 'object',
+                                        'example' => [
+                                            'color' => [1],
+                                            'size'  => [6],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            'examples' => [
+                                'simple_product' => [
+                                    'summary'     => 'Simple Product',
+                                    'description' => 'Create a standard simple product',
+                                    'value'       => [
+                                        'type'                => 'simple',
+                                        'attribute_family_id' => 1,
+                                        'sku'                 => 'furniture',
+                                    ],
+                                ],
+                                'configurable_product' => [
+                                    'summary'     => 'Configurable Product',
+                                    'description' => 'Create a configurable product with variations',
+                                    'value'       => [
+                                        'type'                => 'configurable',
+                                        'attribute_family_id' => 1,
+                                        'sku'                 => 'furniture',
+                                        'super_attributes'    => [
+                                            'color' => [1],
+                                            'size'  => [6],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ]),
+                ),
+            ),
+        ),
+        new Put(
+            security: "is_granted('EDIT_PRODUCT')",
+            processor: ProductProcessor::class,
+            denormalizationContext: [
+                'groups'           => ['write'],
+                'skip_null_values' => false,
+            ],
         ),
         new Patch(
             security: "is_granted('EDIT_PRODUCT')"
