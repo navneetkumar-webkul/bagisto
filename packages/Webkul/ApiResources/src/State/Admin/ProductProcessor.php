@@ -4,7 +4,6 @@ namespace Webkul\ApiResources\State\Admin;
 
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Operation;
-use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\State\ProcessorInterface;
@@ -43,10 +42,6 @@ final class ProductProcessor implements ProcessorInterface
                 return $this->handleUpdate($context, $uriVariables);
             }
 
-            if ($operation instanceof Patch) {
-                return $this->handlePartialUpdate($context, $uriVariables);
-            }
-
             if ($operation instanceof Delete) {
                 return $this->handleDelete($uriVariables);
             }
@@ -63,11 +58,10 @@ final class ProductProcessor implements ProcessorInterface
     {
         $inputData = $context['request']->all();
 
-        // Extract and process images before validation
         $imagesData = null;
         if (isset($inputData['images']) && is_array($inputData['images'])) {
             $imagesData = $inputData['images'];
-            // Remove images from input data to prevent API Platform denormalization error
+
             unset($inputData['images']);
         }
 
@@ -75,7 +69,6 @@ final class ProductProcessor implements ProcessorInterface
 
         $inputData = $this->normalizeRelationships($inputData);
 
-        // Re-add processed images if they exist
         if ($imagesData !== null) {
             $inputData['images'] = $this->processImages($imagesData);
         }
@@ -102,48 +95,20 @@ final class ProductProcessor implements ProcessorInterface
 
         $inputData = $context['request']->all();
 
-        // Extract and process images before validation
         $imagesData = null;
         if (isset($inputData['images']) && is_array($inputData['images'])) {
             $imagesData = $inputData['images'];
-            // Remove images from input data to prevent API Platform denormalization error
+
             unset($inputData['images']);
         }
 
-        $this->validateRequest($context['request'], $inputData);
+        $this->updateValidateRequest($context['request'], $inputData);
 
         $inputData = $this->normalizeRelationships($inputData);
 
-        // Re-add processed images if they exist
         if ($imagesData !== null) {
             $inputData['images'] = $this->processImages($imagesData);
         }
-
-        Event::dispatch('catalog.product.update.before', $productId);
-
-        $product = $this->getRepository()->update($inputData, $productId);
-
-        Event::dispatch('catalog.product.update.after', $product);
-
-        return new JsonResponse([
-            'data'    => $product,
-            'message' => trans('api-resources.rest-api.admin.catalog.products.update-success'),
-        ], 200);
-    }
-
-    private function handlePartialUpdate(array $context, array $uriVariables): JsonResponse
-    {
-        $productId = $uriVariables['id'] ?? null;
-
-        if (! $productId) {
-            throw new \InvalidArgumentException('Product ID is required for partial update operation');
-        }
-
-        $inputData = $context['request']->all();
-
-        $this->validatePartialRequest($context['request'], $inputData);
-
-        $inputData = $this->normalizeRelationships($inputData);
 
         Event::dispatch('catalog.product.update.before', $productId);
 
@@ -194,34 +159,14 @@ final class ProductProcessor implements ProcessorInterface
         }
     }
 
-    /**
-     * @throws ValidationException
-     */
-    private function validatePartialRequest(\Illuminate\Http\Request $request, array $data): void
+    private function updateValidateRequest(\Illuminate\Http\Request $request, array $data): void
     {
-        $baseRules = (new ProductFormRequest)->rules();
-
-        $patchRules = [];
-
-        foreach ($baseRules as $field => $rule) {
-            if (isset($data[$field])) {
-                $patchRules[$field] = $rule;
-            }
-        }
-
-        if (empty($patchRules)) {
-            return;
-        }
-
-        $factory = app('validator');
-
-        $validator = $factory->make($data, $patchRules, (new ProductFormRequest)->messages());
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
+        // TODO : Implement updateValidateRequest() method.
     }
 
+    /**
+     * Summary of normalizeRelationships
+     */
     private function normalizeRelationships(array $data): array
     {
         if (isset($data['attribute_family_id'])) {
@@ -234,7 +179,6 @@ final class ProductProcessor implements ProcessorInterface
             }, $data['super_attributes']);
         }
 
-        // Handle images - convert base64 data to file uploads
         if (isset($data['images']) && is_array($data['images'])) {
             $data['images'] = $this->processImages($data['images']);
         }
@@ -253,14 +197,7 @@ final class ProductProcessor implements ProcessorInterface
             foreach ($imagesData['files'] as $index => $imageData) {
                 $position = $imagesData['position'][$index] ?? ($index + 1);
 
-                // Handle base64 encoded images
                 if (is_string($imageData) && strpos($imageData, 'data:image') === 0) {
-                    $processedImages[] = [
-                        'file'     => $imageData,
-                        'position' => $position,
-                    ];
-                } else {
-                    // Handle file references or IRI paths
                     $processedImages[] = [
                         'file'     => $imageData,
                         'position' => $position,

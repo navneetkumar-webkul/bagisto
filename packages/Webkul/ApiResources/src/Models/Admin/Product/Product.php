@@ -9,7 +9,6 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\GraphQl\Mutation;
 use ApiPlatform\Metadata\GraphQl\Query;
 use ApiPlatform\Metadata\GraphQl\QueryCollection;
-use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model;
@@ -35,6 +34,7 @@ use Webkul\Product\Models\ProductDownloadableSampleProxy;
     paginationEnabled: true,
     paginationItemsPerPage: 5,
     paginationClientItemsPerPage: true,
+    normalizationContext: ['groups' => ['read']],
     denormalizationContext: [
         'groups'           => ['write'],
         'skip_null_values' => false,
@@ -116,13 +116,317 @@ use Webkul\Product\Models\ProductDownloadableSampleProxy;
         new Put(
             security: "is_granted('EDIT_PRODUCT')",
             processor: ProductProcessor::class,
+            normalizationContext: ['groups' => ['read']],
             denormalizationContext: [
                 'groups'           => ['write'],
                 'skip_null_values' => false,
             ],
-        ),
-        new Patch(
-            security: "is_granted('EDIT_PRODUCT')"
+            openapi: new Model\Operation(
+                summary: 'Update the product',
+                description: 'Product update endpoint',
+                tags: ['Product'],
+                parameters: [],
+                requestBody: new Model\RequestBody(
+                    description: 'Product update payload',
+                    required: true,
+                    content: new \ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                'type'       => 'object',
+                                'properties' => [
+                                    'type' => [
+                                        'type'    => 'string',
+                                        'example' => 'simple',
+                                    ],
+                                    'attribute_family_id' => [
+                                        'type'    => 'integer',
+                                        'example' => 1,
+                                    ],
+                                    'sku' => [
+                                        'type'    => 'string',
+                                        'example' => 'furniture',
+                                    ],
+                                    'super_attributes' => [
+                                        'type'    => 'object',
+                                        'example' => [
+                                            'color' => [1],
+                                            'size'  => [6],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            'examples' => [
+                                'simple_product' => [
+                                    'summary'     => 'Simple Product',
+                                    'description' => 'Create a standard simple product',
+                                    'value'       => [
+                                        "channel" => "default",
+                                        "locale" => "en",
+                                        "sku" => "furniture",
+                                        "product_number" => "ssf-001",
+                                        "name" => "Sofa Set",
+                                        "url_key" => "sofa-set-furniture",
+                                        "tax_category_id" => null,
+                                        "new" => 1,
+                                        "featured" => 1,
+                                        "manage_stock" => 1,
+                                        "visible_individually" => 1,
+                                        "guest_checkout" => 0,
+                                        "status" => 1,
+                                        "color" => 3,
+                                        "size" => 9,
+                                        "brand" => 17,
+                                        "short_description" => "What is Lorem Ipsum?",
+                                        "description" => "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                                        "meta_title" => "Premium sofa sets",
+                                        "meta_description" => "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                                        "meta_keywords" => "Sofa set",
+                                        "price" => 10.5,
+                                        "cost" => 0,
+                                        "special_price" => 8.3,
+                                        "special_price_from" => "2023-05-30",
+                                        "special_price_to" => "2025-05-22",
+                                        "length" => 0,
+                                        "width" => 0,
+                                        "height" => 0,
+                                        "weight" => 1,
+                                        "inventories" => [
+                                            "1" => 500
+                                        ],
+                                        "images" => [
+                                            "files" => [],
+                                            "position" => [1]
+                                        ],
+                                        "videos" => [
+                                            "files" => [],
+                                            "position" => [1]
+                                        ],
+                                        "categories" => [1],
+                                        "channels" => [1],
+                                        "up_sell" => [1],
+                                        "cross_sell" => [1],
+                                        "related_products" => [1]
+                                    ],
+                                ],
+                                'configurable_product' => [
+                                    'summary'     => 'Configurable Product',
+                                    'description' => 'Update a configurable product with variations',
+                                    'value'       => [
+                                        'channel'               => 'default',
+                                        'locale'                => 'en',
+                                        'sku'                   => 'skipping-rope',
+                                        'product_number'        => 'sr-001',
+                                        'name'                  => 'Skipping Rope',
+                                        'url_key'               => 'skipping-rope',
+                                        'tax_category_id'       => null,
+                                        'new'                   => 1,
+                                        'featured'              => 1,
+                                        'visible_individually'  => 1,
+                                        'guest_checkout'        => 0,
+                                        'status'                => 1,
+                                        'brand'                 => 17,
+                                        'short_description'     => 'What is Lorem Ipsum?',
+                                        'description'           => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                                        'meta_title'            => 'Premium sofa sets',
+                                        'meta_description'      => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                                        'meta_keywords'         => 'Sofa set',
+                                        'price'                 => 0,
+                                        'customer_group_prices' => [
+                                            'customer_group_price_0' => [
+                                                'customer_group_id' => 1,
+                                                'qty'               => 2,
+                                                'value_type'        => 'fixed',
+                                                'value'             => 3.2,
+                                            ],
+                                        ],
+                                        'categories' => [
+                                            1,
+                                            2,
+                                        ],
+                                        'channels' => [
+                                            1,
+                                            3,
+                                            4,
+                                        ],
+                                        'variants' => [
+                                            '28' => [
+                                                'sku'         => 'skipping-rope-variant-1-6',
+                                                'name'        => 'Red-S',
+                                                'color'       => 1,
+                                                'size'        => 6,
+                                                'price'       => 10.5,
+                                                'weight'      => 1.2,
+                                                'status'      => 1,
+                                                'inventories' => [
+                                                    '1' => 500,
+                                                ],
+                                                'images[]' => [
+                                                    'string',
+                                                ],
+                                            ],
+                                            '29' => [
+                                                'sku'         => 'skipping-rope-variant-1-7',
+                                                'name'        => 'Red-M',
+                                                'color'       => 1,
+                                                'size'        => 7,
+                                                'price'       => 15,
+                                                'weight'      => 1,
+                                                'status'      => 1,
+                                                'inventories' => [
+                                                    '1' => 500,
+                                                ],
+                                                'images[files]' => [
+                                                    'string',
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                                'downloadable_product' => [
+                                    'summary'     => 'Downloadable Product',
+                                    'description' => 'Update a downloadable product with links and samples',
+                                    'value'       => [
+                                        'channel'               => 'default',
+                                        'locale'                => 'en',
+                                        'sku'                   => 'skipping-rope',
+                                        'product_number'        => 'sr-001',
+                                        'name'                  => 'Skipping Rope',
+                                        'url_key'               => 'skipping-rope',
+                                        'tax_category_id'       => null,
+                                        'new'                   => 1,
+                                        'featured'              => 1,
+                                        'visible_individually'  => 1,
+                                        'guest_checkout'        => 0,
+                                        'status'                => 1,
+                                        'brand'                 => 17,
+                                        'short_description'     => 'What is Lorem Ipsum?',
+                                        'description'           => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                                        'meta_title'            => 'Premium sofa sets',
+                                        'meta_description'      => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                                        'meta_keywords'         => 'Sofa set',
+                                        'price'                 => 0,
+                                        'customer_group_prices' => [
+                                            'customer_group_price_0' => [
+                                                'customer_group_id' => 1,
+                                                'qty'               => 2,
+                                                'value_type'        => 'fixed',
+                                                'value'             => 3.2,
+                                            ],
+                                        ],
+                                        'categories' => [
+                                            1,
+                                            2,
+                                        ],
+                                        'channels' => [
+                                            1,
+                                            3,
+                                            4,
+                                        ],
+                                        'downloadable_links' => [
+                                            'link_0' => [
+                                                'en' => [
+                                                    'title' => 'Link 1',
+                                                ],
+                                                'price'       => 5,
+                                                'type'        => 'url',
+                                                'url'         => 'https://cdn.pixabay.com/photo/2016/03/26/13/08/conceptual-1280533_1280.jpg',
+                                                'sample_type' => 'url',
+                                                'sample_url'  => 'https://cdn.pixabay.com/photo/2016/11/22/19/11/brick-wall-1850095_1280.jpg',
+                                                'downloads'   => 10,
+                                                'sort_order'  => 1,
+                                            ],
+                                            'link_1' => [
+                                                'en' => [
+                                                    'title' => 'Link 2',
+                                                ],
+                                                'price'       => 10,
+                                                'type'        => 'url',
+                                                'url'         => 'https://cdn.pixabay.com/photo/2016/03/26/13/08/conceptual-1280533_1280.jpg',
+                                                'sample_type' => 'url',
+                                                'sample_url'  => 'https://cdn.pixabay.com/photo/2016/11/22/19/11/brick-wall-1850095_1280.jpg',
+                                                'downloads'   => 20,
+                                                'sort_order'  => 2,
+                                            ],
+                                        ],
+                                        'downloadable_samples' => [
+                                            'sample_0' => [
+                                                'en' => [
+                                                    'title' => 'Sample 1',
+                                                ],
+                                                'type'       => 'url',
+                                                'url'        => 'https://cdn.pixabay.com/photo/2017/10/04/14/50/staging-2816464_1280.jpg',
+                                                'sort_order' => 1,
+                                            ],
+                                            'sample_1' => [
+                                                'en' => [
+                                                    'title' => 'Sample 2',
+                                                ],
+                                                'type'       => 'url',
+                                                'url'        => 'https://cdn.pixabay.com/photo/2015/12/05/23/38/nursery-1078923_1280.jpg',
+                                                'sort_order' => 2,
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                                'grouped_product' => [
+                                    'summary'     => 'Group Product',
+                                    'description' => 'Update a grouped product along with its associated products',
+                                    'value'       => [
+                                        'channel'               => 'default',
+                                        'locale'                => 'en',
+                                        'sku'                   => 'skipping-rope',
+                                        'product_number'        => 'sr-001',
+                                        'name'                  => 'Skipping Rope',
+                                        'url_key'               => 'skipping-rope',
+                                        'tax_category_id'       => null,
+                                        'new'                   => 1,
+                                        'featured'              => 1,
+                                        'visible_individually'  => 1,
+                                        'guest_checkout'        => 0,
+                                        'status'                => 1,
+                                        'brand'                 => 17,
+                                        'short_description'     => 'What is Lorem Ipsum?',
+                                        'description'           => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                                        'meta_title'            => 'Premium sofa sets',
+                                        'meta_description'      => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                                        'meta_keywords'         => 'Sofa set',
+                                        'price'                 => 0,
+                                        'customer_group_prices' => [
+                                            'customer_group_price_0' => [
+                                                'customer_group_id' => 1,
+                                                'qty'               => 2,
+                                                'value_type'        => 'fixed',
+                                                'value'             => 3.2,
+                                            ],
+                                        ],
+                                        'categories' => [
+                                            1,
+                                            2,
+                                        ],
+                                        'channels' => [
+                                            1,
+                                            3,
+                                            4,
+                                        ],
+                                        'links' => [
+                                            'link_0' => [
+                                                'associated_product_id' => 1,
+                                                'qty'                   => 2,
+                                                'sort_order'            => 1,
+                                            ],
+                                            'link_1' => [
+                                                'associated_product_id' => 2,
+                                                'qty'                   => 3,
+                                                'sort_order'            => 2,
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ]),
+                ),
+            ),
         ),
         new Delete(
             security: "is_granted('DELETE_PRODUCT')"
@@ -294,6 +598,11 @@ class Product extends \Webkul\Product\Models\Product
     public function super_attributes(): BelongsToMany
     {
         return $this->belongsToMany(Attribute::class, 'product_super_attributes');
+    }
+
+    public function variants(): HasMany
+    {
+        return $this->hasMany(static::class, 'parent_id');
     }
 
     /**
