@@ -2,6 +2,7 @@
 
 namespace Webkul\ApiResources\Models\Admin\Product;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -15,6 +16,7 @@ use ApiPlatform\OpenApi\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Webkul\ApiResources\Dto\CreateProductInput;
 use Webkul\ApiResources\Http\Requests\Admin\ProductFormRequest;
 use Webkul\ApiResources\Models\Admin\Attribute\Attribute;
 use Webkul\ApiResources\Models\Admin\Attribute\AttributeFamily;
@@ -34,11 +36,6 @@ use Webkul\Product\Models\ProductDownloadableSampleProxy;
     paginationEnabled: true,
     paginationItemsPerPage: 5,
     paginationClientItemsPerPage: true,
-    normalizationContext: ['groups' => ['read']],
-    denormalizationContext: [
-        'groups'           => ['write'],
-        'skip_null_values' => false,
-    ],
     operations: [
         new Get(
             security: "is_granted('VIEW_PRODUCT')"
@@ -50,6 +47,11 @@ use Webkul\Product\Models\ProductDownloadableSampleProxy;
             security: "is_granted('CREATE_PRODUCT')",
             processor: ProductProcessor::class,
             rules: ProductFormRequest::class,
+            normalizationContext: ['groups' => []],
+            denormalizationContext: [
+                'groups'           => [],
+                'skip_null_values' => false,
+            ],
             openapi: new Model\Operation(
                 summary: 'Store the product',
                 description: 'Product creation endpoint',
@@ -160,52 +162,52 @@ use Webkul\Product\Models\ProductDownloadableSampleProxy;
                                     'summary'     => 'Simple Product',
                                     'description' => 'Create a standard simple product',
                                     'value'       => [
-                                        "channel" => "default",
-                                        "locale" => "en",
-                                        "sku" => "furniture",
-                                        "product_number" => "ssf-001",
-                                        "name" => "Sofa Set",
-                                        "url_key" => "sofa-set-furniture",
-                                        "tax_category_id" => null,
-                                        "new" => 1,
-                                        "featured" => 1,
-                                        "manage_stock" => 1,
-                                        "visible_individually" => 1,
-                                        "guest_checkout" => 0,
-                                        "status" => 1,
-                                        "color" => 3,
-                                        "size" => 9,
-                                        "brand" => 17,
-                                        "short_description" => "What is Lorem Ipsum?",
-                                        "description" => "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                                        "meta_title" => "Premium sofa sets",
-                                        "meta_description" => "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                                        "meta_keywords" => "Sofa set",
-                                        "price" => 10.5,
-                                        "cost" => 0,
-                                        "special_price" => 8.3,
-                                        "special_price_from" => "2023-05-30",
-                                        "special_price_to" => "2025-05-22",
-                                        "length" => 0,
-                                        "width" => 0,
-                                        "height" => 0,
-                                        "weight" => 1,
-                                        "inventories" => [
-                                            "1" => 500
+                                        'channel'              => 'default',
+                                        'locale'               => 'en',
+                                        'sku'                  => 'furniture',
+                                        'product_number'       => 'ssf-001',
+                                        'name'                 => 'Sofa Set',
+                                        'url_key'              => 'sofa-set-furniture',
+                                        'tax_category_id'      => null,
+                                        'new'                  => 1,
+                                        'featured'             => 1,
+                                        'manage_stock'         => 1,
+                                        'visible_individually' => 1,
+                                        'guest_checkout'       => 0,
+                                        'status'               => 1,
+                                        'color'                => 3,
+                                        'size'                 => 9,
+                                        'brand'                => 17,
+                                        'short_description'    => 'What is Lorem Ipsum?',
+                                        'description'          => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                                        'meta_title'           => 'Premium sofa sets',
+                                        'meta_description'     => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                                        'meta_keywords'        => 'Sofa set',
+                                        'price'                => 10.5,
+                                        'cost'                 => 0,
+                                        'special_price'        => 8.3,
+                                        'special_price_from'   => '2023-05-30',
+                                        'special_price_to'     => '2025-05-22',
+                                        'length'               => 0,
+                                        'width'                => 0,
+                                        'height'               => 0,
+                                        'weight'               => 1,
+                                        'inventories'          => [
+                                            '1' => 500,
                                         ],
-                                        "images" => [
-                                            "files" => [],
-                                            "position" => [1]
+                                        'images' => [
+                                            'files'    => [],
+                                            'position' => [1],
                                         ],
-                                        "videos" => [
-                                            "files" => [],
-                                            "position" => [1]
+                                        'videos' => [
+                                            'files'    => [],
+                                            'position' => [1],
                                         ],
-                                        "categories" => [1],
-                                        "channels" => [1],
-                                        "up_sell" => [1],
-                                        "cross_sell" => [1],
-                                        "related_products" => [1]
+                                        'categories'       => [1],
+                                        'channels'         => [1],
+                                        'up_sell'          => [1],
+                                        'cross_sell'       => [1],
+                                        'related_products' => [1],
                                     ],
                                 ],
                                 'configurable_product' => [
@@ -444,7 +446,9 @@ use Webkul\Product\Models\ProductDownloadableSampleProxy;
         new Mutation(
             name: 'create',
             security: "is_granted('CREATE_PRODUCT')",
-            processor: ProductProcessor::class
+            processor: ProductProcessor::class,
+            input: CreateProductInput::class,
+
         ),
         new Mutation(
             name: 'update',
@@ -593,6 +597,12 @@ class Product extends \Webkul\Product\Models\Product
     public function attribute_family(): BelongsTo
     {
         return $this->belongsTo(AttributeFamily::class);
+    }
+
+    #[ApiProperty(readableLink: true)]
+    public function getSuper_attributes()
+    {
+        return $this->super_attributes;
     }
 
     public function super_attributes(): BelongsToMany

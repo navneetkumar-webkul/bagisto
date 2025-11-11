@@ -25,9 +25,10 @@ return [
     ],
 
     'formats' => [
-        'jsonld' => ['application/ld+json'],
-        'json'   => ['application/json'],
-        'html'   => ['text/html'],
+        'jsonld'    => ['application/ld+json'],
+        'json'      => ['application/json'],
+        'html'      => ['text/html'],
+        'multipart' => ['multipart/form-data'],
     ],
 
     'patch_formats' => [
@@ -79,7 +80,7 @@ return [
         'max_query_depth'      => 200,
         'route_prefix'         => '/api/graphql',
         'middleware'           => [
-            \Webkul\ApiResources\Http\Middleware\GraphQLAuthMiddleware::class.':sanctum',
+            // \Webkul\ApiResources\Http\Middleware\GraphQLAuthMiddleware::class.':sanctum',
         ],
     ],
     // set to null if you want to keep snake_case

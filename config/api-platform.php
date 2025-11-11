@@ -79,7 +79,7 @@ return [
         'max_query_depth'      => 200,
         'route_prefix'         => '/api/graphql',
         'middleware'           => [
-            \Webkul\ApiResources\Http\Middleware\GraphQLAuthMiddleware::class.':sanctum',
+            // \Webkul\ApiResources\Http\Middleware\GraphQLAuthMiddleware::class.':sanctum',
         ],
     ],
     // set to null if you want to keep snake_case
